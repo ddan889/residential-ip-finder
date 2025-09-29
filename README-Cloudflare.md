@@ -15,7 +15,7 @@
 3.  选择您 Fork 的 GitHub 仓库。
 4.  在 **“构建和部署 (Build & deployments)”** 设置页面，进行以下关键配置：
     *   **生产分支 (Production branch)**: 选择 `deploy`。这是最重要的步骤，确保 Cloudflare 部署的是我们指定的分支。
-    *   **框架预设 (Framework preset)**: 设置为 `None`。
+    *   **框架预设 (Framework preset)**: 设置为 `None` (如果 `None` 选项不可用，请将其留空或选择 `Custom`)。
     *   **构建命令 (Build command)**: **留空**。
     *   **构建输出目录 (Build output directory)**: 设置为 `/`。
     *   **根目录 (Root Directory)**: 设置为 `/`。
