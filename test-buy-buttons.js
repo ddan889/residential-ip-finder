@@ -1,0 +1,1 @@
+console.log("Testing buy button functionality..."); const testUrls = ["https://iproyal.com", "https://smartproxy.com", "https://oxylabs.io", "https://brightdata.com", "https://netnut.io", "https://webshare.io", "https://marsproxies.com", "https://proxy-seller.com"]; testUrls.forEach(url => { console.log(`Testing URL: ${url}`); });

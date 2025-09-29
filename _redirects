@@ -1,0 +1,3 @@
+# Cloudflare Pages 重定向规则
+/residential-ip-finder.html /index.html 301
+/admin /admin.html 200

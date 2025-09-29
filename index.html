@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>住宅IP代理价格比较工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .search-section {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 12px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 14px;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .results-section {
+            padding: 30px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4facfe;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .proxy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .proxy-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .proxy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #4facfe;
+        }
+
+        .proxy-card.best-deal {
+            border-color: #28a745;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        }
+
+        .proxy-card.best-deal::before {
+            content: "最佳选择";
+            position: absolute;
+            top: 10px;
+            right: -30px;
+            background: #28a745;
+            color: white;
+            padding: 5px 40px;
+            font-size: 12px;
+            font-weight: bold;
+            transform: rotate(45deg);
+        }
+
+        .proxy-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .proxy-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .proxy-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stars {
+            color: #ffc107;
+        }
+
+        .proxy-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+
+        .proxy-type-badge {
+            margin-bottom: 8px;
+        }
+
+        .proxy-type-badge small {
+            background: #007bff;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .proxy-features {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+
+        .proxy-features li {
+            padding: 5px 0;
+            color: #495057;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .proxy-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .proxy-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+            flex: 1;
+        }
+
+        .report-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .report-content h3 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .top-picks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .pick-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .pick-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pick-card.winner {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #333;
+            border: 2px solid #ffd700;
+        }
+
+        .pick-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .crown, .medal {
+            font-size: 24px;
+        }
+
+        .pick-details h5 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: inherit;
+        }
+
+        .price-analysis, .recommendations {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .analysis-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .recommendations ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendations li {
+            background: rgba(255,255,255,0.05);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .comparison-table {
+            margin-top: 30px;
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .table th,
+        .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .price-highlight {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 1.1rem;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online {
+            background: #28a745;
+        }
+
+        .status-offline {
+            background: #dc3545;
+        }
+
+        .status-limited {
+            background: #ffc107;
+        }
+
+        .platform-suggestions {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4CAF50;
+        }
+
+        .platform-suggestions h4 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .platform-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .platform-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .platform-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .recommendation-text {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #45a049 0%, #4CAF50 100%);
+            transform: translateY(-2px);
+        }
+
+        .platform-support {
+            margin: 10px 0;
+            padding: 8px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 5px;
+            border-left: 3px solid #4CAF50;
+        }
+
+        .platform-support small {
+            color: #4CAF50;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .search-controls {
+                flex-direction: column;
+            }
+
+            .search-input {
+                min-width: auto;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .proxy-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 住宅IP代理价格比较工具</h1>
+            <p>找到最便宜、最可靠的住宅IP代理服务</p>
+        </div>
+
+        <div class="search-section">
+            <div class="search-controls">
+                <input type="text" class="search-input" id="searchInput" placeholder="搜索代理服务商或功能...">
+                <input type="text" class="search-input" id="platformSearch" placeholder="输入平台名称 (如: TikTok, Facebook, X)...">
+                <button class="btn btn-primary" onclick="searchProxies()">🔍 搜索代理</button>
+                <button class="btn btn-success" onclick="searchByPlatform()">🎯 平台推荐</button>
+                <button class="btn btn-secondary" onclick="loadSampleData()">📊 加载示例数据</button>
+            </div>
+
+            <div class="platform-suggestions" id="platformSuggestions" style="display: none;">
+                <h4>🎯 平台推荐结果</h4>
+                <div id="recommendationText"></div>
+                <div class="platform-tags">
+                    <span class="platform-tag" onclick="quickSearch('tiktok')">TikTok</span>
+                    <span class="platform-tag" onclick="quickSearch('facebook')">Facebook</span>
+                    <span class="platform-tag" onclick="quickSearch('x')">X (Twitter)</span>
+                    <span class="platform-tag" onclick="quickSearch('instagram')">Instagram</span>
+                    <span class="platform-tag" onclick="quickSearch('youtube')">YouTube</span>
+                    <span class="platform-tag" onclick="quickSearch('linkedin')">LinkedIn</span>
+                </div>
+            </div>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label>代理类型</label>
+                    <select class="filter-select" id="proxyTypeFilter">
+                        <option value="">所有类型</option>
+                        <option value="residential">住宅代理</option>
+                        <option value="datacenter">数据中心代理</option>
+                        <option value="rotating">动态代理</option>
+                        <option value="mobile">移动代理</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>价格范围</label>
+                    <select class="filter-select" id="priceFilter">
+                        <option value="">所有价格</option>
+                        <option value="0-50">$0 - $50</option>
+                        <option value="50-100">$50 - $100</option>
+                        <option value="100-200">$100 - $200</option>
+                        <option value="200+">$200+</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>地理位置</label>
+                    <select class="filter-select" id="locationFilter">
+                        <option value="">所有地区</option>
+                        <option value="us">美国</option>
+                        <option value="eu">欧洲</option>
+                        <option value="asia">亚洲</option>
+                        <option value="global">全球</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>带宽类型</label>
+                    <select class="filter-select" id="bandwidthFilter">
+                        <option value="">所有类型</option>
+                        <option value="unlimited">无限制</option>
+                        <option value="metered">按量计费</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>协议支持</label>
+                    <select class="filter-select" id="protocolFilter">
+                        <option value="">所有协议</option>
+                        <option value="http">HTTP/HTTPS</option>
+                        <option value="socks5">SOCKS5</option>
+                        <option value="both">HTTP + SOCKS5</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <div id="loadingIndicator" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>正在搜索最佳住宅IP代理服务...</p>
+            </div>
+
+            <div id="resultsContainer">
+                <h2>🎯 推荐的住宅IP代理服务</h2>
+                <p>点击"加载示例数据"查看当前市场上的热门选择，或使用搜索功能查找特定服务。</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量存储代理数据 - 直接使用静态数据
+        let proxyData = [
+                {
+                    id: 1,
+                    name: "Bright Data",
+                    price: "$15/GB起",
+                    rating: 4.8,
+                    features: ["7200万+ 住宅IP", "全球195个国家", "99.9%正常运行时间", "24/7客服支持"],
+                    description: "全球最大的住宅代理网络，提供企业级服务质量",
+                    website: "https://brightdata.com",
+                    category: "enterprise"
+                },
+                {
+                    id: 2,
+                    name: "Oxylabs",
+                    price: "$8/GB起",
+                    rating: 4.7,
+                    features: ["1亿+ 住宅IP", "全球100+国家", "99.95%成功率", "专业技术支持"],
+                    description: "高性能代理服务，适合大规模数据采集",
+                    website: "https://oxylabs.io",
+                    category: "enterprise"
+                },
+                {
+                    id: 3,
+                    name: "Smartproxy",
+                    price: "$7/GB起",
+                    rating: 4.6,
+                    features: ["4000万+ 住宅IP", "全球195个国家", "10Gbps速度", "简单易用API"],
+                    description: "用户友好的代理服务，性价比极高",
+                    website: "https://smartproxy.com",
+                    category: "business"
+                },
+                {
+                    id: 4,
+                    name: "IPRoyal",
+                    price: "$7/月起",
+                    rating: 4.5,
+                    features: ["500万+ 住宅IP", "全球100个国家", "无限带宽", "灵活计费"],
+                    description: "提供月付和按量付费两种模式",
+                    website: "https://iproyal.com",
+                    category: "business"
+                },
+                {
+                    id: 5,
+                    name: "ProxySeller",
+                    price: "$1.77/GB起",
+                    rating: 4.4,
+                    features: ["600万+ 住宅IP", "全球100个国家", "移动IP支持", "Reddit推荐"],
+                    description: "Reddit社区推荐的高性价比选择",
+                    website: "https://proxy-seller.com",
+                    category: "budget"
+                },
+                {
+                    id: 6,
+                    name: "NetNut",
+                    price: "$20/GB起",
+                    rating: 4.3,
+                    features: ["2000万+ 住宅IP", "全球50个国家", "直连ISP", "零日志政策"],
+                    description: "直接连接ISP，提供最纯净的IP资源",
+                    website: "https://netnut.io",
+                    category: "premium"
+                },
+                {
+                    id: 7,
+                    name: "Webshare",
+                    price: "$0.3/GB起",
+                    rating: 4.2,
+                    features: ["100万+ 住宅IP", "全球50个国家", "免费试用", "超低价格"],
+                    description: "市场上最便宜的住宅代理服务之一",
+                    website: "https://webshare.io",
+                    category: "budget"
+                },
+                {
+                    id: 8,
+                    name: "MarsProxies",
+                    price: "$2.5/GB起",
+                    rating: 4.1,
+                    features: ["200万+ 住宅IP", "全球100个国家", "高匿名性", "快速响应"],
+                    description: "新兴代理服务商，提供优质服务",
+                    website: "https://marsproxies.com",
+                    category: "budget"
+                }
+            ];
+
+        function showLoading() {
+            document.getElementById('loadingIndicator').style.display = 'block';
+            document.getElementById('resultsContainer').innerHTML = '';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingIndicator').style.display = 'none';
+        }
+
+        // 新增购买功能
+        function buyProxy(website, proxyName) {
+            if (website && website !== '#') {
+                // 在新窗口中打开代理商官网
+                window.open(website, '_blank');
+                
+                // 记录购买点击事件到控制台
+                console.log(`用户点击购买: ${proxyName} - ${website}`);
+            } else {
+                alert(`${proxyName} 的购买链接暂时不可用，请稍后再试。`);
+            }
+        }
+
+        function searchProxies() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (!searchTerm.trim()) {
+                alert('请输入搜索关键词');
+                return;
+            }
+
+            showLoading();
+            
+            // 模拟搜索延迟
+            setTimeout(() => {
+                hideLoading();
+                displaySearchResults(searchTerm);
+            }, 2000);
+        }
+
+        function displaySearchResults(searchTerm) {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = `
+                <h2>🔍 "${searchTerm}" 的搜索结果</h2>
+                <p>正在实时搜索相关的住宅IP代理服务...</p>
+                <div class="proxy-grid">
+                    <div class="proxy-card">
+                        <div class="proxy-header">
+                            <div class="proxy-name">搜索中...</div>
+                        </div>
+                        <p>正在从多个数据源获取最新价格信息</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadSampleData() {
+            showLoading();
+            
+            // 基于真实市场调研的数据
+            setTimeout(() => {
+                proxyData = [
+                    {
+                        name: "IPRoyal",
+                        price: "$7/月起",
+                        priceValue: 7,
+                        rating: 4.6,
+                        features: ["5M+ 住宅IP", "99%正常运行时间", "98.5%成功率", "24/7客服支持", "最佳性价比"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        bestDeal: true,
+                        description: "2024年最佳预算选择，适合个人和小企业",
+                        website: "https://iproyal.com",
+                        platforms: ["tiktok", "facebook", "instagram", "general"],
+                        proxyType: "residential"
+                    },
+                    {
+                        name: "Smartproxy",
+                        price: "$4.50/GB起",
+                        priceValue: 45,
+                        rating: 4.5,
+                        features: ["40M+ 住宅IP", "全球195个国家", "高速稳定", "API支持"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "全球覆盖最广的住宅代理服务",
+                        website: "https://smartproxy.com",
+                        platforms: ["facebook", "instagram", "youtube", "general"],
+                        proxyType: "residential"
+                    },
+                    {
+                        name: "Oxylabs",
+                        price: "$15/月起",
+                        priceValue: 15,
+                        rating: 4.7,
+                        features: ["100M+ 住宅IP", "企业级服务", "专业技术支持", "高匿名性"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "企业级住宅代理解决方案领导者",
+                        website: "https://oxylabs.io",
+                        platforms: ["linkedin", "facebook", "x", "twitter", "general"],
+                        proxyType: "residential"
+                    },
+                    {
+                        name: "Bright Data",
+                        price: "$500/月起",
+                        priceValue: 500,
+                        rating: 4.8,
+                        features: ["72M+ 住宅IP", "Fortune 500信赖", "最高成功率", "全球数据中心"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "全球最大的代理网络提供商",
+                        website: "https://brightdata.com",
+                        platforms: ["linkedin", "facebook", "youtube", "general"],
+                        proxyType: "datacenter"
+                    },
+                    {
+                        name: "NetNut",
+                        price: "$20/月起",
+                        priceValue: 20,
+                        rating: 4.4,
+                        features: ["20M+ 住宅IP", "ISP级代理", "高速连接", "专业支持"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "ISP级住宅代理专业提供商",
+                        website: "https://netnut.io",
+                        platforms: ["tiktok", "instagram", "x", "twitter", "general"],
+                        proxyType: "residential"
+                    },
+                    {
+                        name: "Webshare",
+                        price: "$2.99/月起",
+                        priceValue: 3,
+                        rating: 4.3,
+                        features: ["1M+ 住宅IP", "超低价格", "简单易用", "快速设置"],
+                        status: "online",
+                        location: "us",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "最便宜的住宅代理服务之一",
+                        website: "https://webshare.io",
+                        platforms: ["tiktok", "facebook", "general"],
+                        proxyType: "datacenter"
+                    },
+                    {
+                        name: "MarsProxies",
+                        price: "$1.6/GB起",
+                        priceValue: 16,
+                        rating: 4.2,
+                        features: ["2M+ 住宅IP", "按需付费", "全球覆盖", "API集成"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "灵活的按需付费代理服务",
+                        website: "https://marsproxies.com",
+                        platforms: ["instagram", "youtube", "general"],
+                        proxyType: "residential"
+                    },
+                    {
+                        name: "ProxySeller",
+                        price: "$1.77/月起",
+                        priceValue: 2,
+                        rating: 4.1,
+                        features: ["IPv4/IPv6支持", "多国IP", "高匿名", "24/7支持"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "提供IPv4和IPv6代理的专业服务商",
+                        website: "https://proxy-seller.com",
+                        platforms: ["x", "twitter", "linkedin", "general"],
+                        proxyType: "datacenter"
+                    },
+                    {
+                        name: "Storm Proxies",
+                        price: "$50/月起",
+                        priceValue: 50,
+                        rating: 4.0,
+                        features: ["40K+ 住宅IP", "轮换代理", "高速连接", "美国专线"],
+                        status: "online",
+                        location: "us",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "专注美国市场的轮换代理服务",
+                        website: "https://stormproxies.cn",
+                        platforms: ["facebook", "instagram", "general"],
+                        proxyType: "rotating"
+                    },
+                    {
+                        name: "MyPrivateProxy",
+                        price: "$2.49/月起",
+                        priceValue: 2,
+                        rating: 4.2,
+                        features: ["专用代理", "高速稳定", "多地区选择", "即时激活"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "专业的私人代理服务提供商",
+                        website: "https://myprivateproxy.net",
+                        platforms: ["linkedin", "facebook", "general"],
+                        proxyType: "datacenter"
+                    },
+                    {
+                        name: "SSLPrivateProxy",
+                        price: "$2.50/月起",
+                        priceValue: 3,
+                        rating: 4.1,
+                        features: ["SSL加密", "专用IP", "高匿名性", "多协议支持"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "提供SSL加密的安全代理服务",
+                        website: "https://sslprivateproxy.com",
+                        platforms: ["x", "twitter", "youtube", "general"],
+                        proxyType: "datacenter"
+                    },
+                    {
+                        name: "Infatica",
+                        price: "$360/月起",
+                        priceValue: 360,
+                        rating: 4.3,
+                        features: ["10M+ 住宅IP", "道德采集", "企业级", "全球覆盖"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "道德IP采集的行业标杆",
+                        website: "https://infatica.io",
+                        platforms: ["facebook", "instagram", "linkedin", "general"],
+                        proxyType: "residential"
+                    },
+                    {
+                        name: "Blazing SEO",
+                        price: "$300/月起",
+                        priceValue: 300,
+                        rating: 4.4,
+                        features: ["专用代理", "SEO优化", "高速稳定", "美国服务器"],
+                        status: "online",
+                        location: "us",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "专业SEO代理服务提供商",
+                        website: "https://blazingseollc.com",
+                        platforms: ["youtube", "linkedin", "facebook", "general"],
+                        proxyType: "datacenter"
+                    },
+                    {
+                        name: "PacketStream",
+                        price: "$1/GB起",
+                        priceValue: 10,
+                        rating: 4.0,
+                        features: ["P2P网络", "真实住宅IP", "按需付费", "全球节点"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "基于P2P网络的创新代理服务",
+                        website: "https://packetstream.io",
+                        platforms: ["tiktok", "x", "twitter", "instagram", "general"],
+                        proxyType: "residential"
+                    },
+                    {
+                        name: "Residential Proxies",
+                        price: "$75/月起",
+                        priceValue: 75,
+                        rating: 4.1,
+                        features: ["5M+ 住宅IP", "高匿名性", "稳定连接", "多协议支持"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "专注住宅IP的专业服务商",
+                        website: "https://residential-proxies.org",
+                        platforms: ["facebook", "instagram", "youtube", "linkedin", "general"],
+                        proxyType: "residential"
+                    },
+                    {
+                        name: "Mobile Proxy Space",
+                        price: "$80/月起",
+                        priceValue: 80,
+                        rating: 4.5,
+                        features: ["4G/5G移动IP", "真实设备", "动态轮换", "全球运营商"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "专业移动代理服务提供商",
+                        website: "https://mobileproxyspace.com",
+                        platforms: ["tiktok", "instagram", "facebook", "general"],
+                        proxyType: "mobile"
+                    },
+                    {
+                        name: "Proxy-Cheap",
+                        price: "$2.5/月起",
+                        priceValue: 3,
+                        rating: 4.0,
+                        features: ["数据中心代理", "IPv4/IPv6", "高速连接", "多地区"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "经济实惠的数据中心代理",
+                        website: "https://proxy-cheap.com",
+                        platforms: ["youtube", "linkedin", "general"],
+                        proxyType: "datacenter"
+                    },
+                    {
+                        name: "Rotating Proxies",
+                        price: "$120/月起",
+                        priceValue: 120,
+                        rating: 4.2,
+                        features: ["自动轮换", "住宅IP池", "高匿名性", "API支持"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "专业的轮换代理服务",
+                        website: "https://rotatingproxies.com",
+                        platforms: ["tiktok", "x", "twitter", "facebook", "general"],
+                        proxyType: "rotating"
+                    },
+                    {
+                        name: "4G Mobile Proxies",
+                        price: "$150/月起",
+                        priceValue: 150,
+                        rating: 4.6,
+                        features: ["纯4G网络", "真实移动设备", "高成功率", "全球覆盖"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "高质量4G移动代理专家",
+                        website: "https://4gmobileproxies.com",
+                        platforms: ["tiktok", "instagram", "facebook", "x", "twitter", "general"],
+                        proxyType: "mobile"
+                    },
+                    {
+                        name: "Dynamic Proxy Network",
+                        price: "$90/月起",
+                        priceValue: 90,
+                        rating: 4.3,
+                        features: ["动态IP分配", "智能轮换", "高可用性", "实时监控"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "智能动态代理网络服务",
+                        website: "https://dynamicproxy.net",
+                        platforms: ["youtube", "linkedin", "facebook", "general"],
+                        proxyType: "rotating"
+                    },
+                    {
+                        name: "Smartproxy",
+                        price: "$4.50/GB起",
+                        priceValue: 45,
+                        rating: 4.5,
+                        features: ["65M+ 住宅IP", "99.99%正常运行时间", "99.47%成功率", "用户友好界面"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "性价比与性能的完美平衡",
+                        website: "https://smartproxy.com",
+                        platforms: ["x", "twitter", "linkedin", "general"],
+                        proxyType: "residential"
+                    },
+                    {
+                        name: "Oxylabs",
+                        price: "$8/GB起",
+                        priceValue: 80,
+                        rating: 4.7,
+                        features: ["100M+ 住宅IP", "99.9%正常运行时间", "99.9%成功率", "企业级支持"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "大规模数据抓取的顶级选择",
+                        website: "https://oxylabs.io",
+                        platforms: ["facebook", "instagram", "youtube", "general"],
+                        proxyType: "residential"
+                    },
+                    {
+                        name: "Bright Data",
+                        price: "$10.50/GB起",
+                        priceValue: 105,
+                        rating: 4.8,
+                        features: ["72M+ 住宅IP", "99.9%正常运行时间", "99.8%成功率", "Web Unlocker工具"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "行业领导者，功能最全面",
+                        website: "https://brightdata.com",
+                        platforms: ["tiktok", "x", "twitter", "facebook", "instagram", "youtube", "general"]
+                    },
+                    {
+                        name: "NetNut",
+                        price: "$15/GB起",
+                        priceValue: 150,
+                        rating: 4.4,
+                        features: ["85M+ 住宅IP", "99%正常运行时间", "99%成功率", "灵活定价"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "高性能企业解决方案",
+                        website: "https://netnut.io",
+                        platforms: ["youtube", "linkedin", "general"]
+                    },
+                    {
+                        name: "Webshare",
+                        price: "$0.3/GB起",
+                        priceValue: 3,
+                        rating: 4.3,
+                        features: ["定制化方案", "高速连接", "免费试用", "适合初创企业"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "超低价格的可靠选择",
+                        website: "https://webshare.io",
+                        platforms: ["tiktok", "instagram", "general"]
+                    },
+                    {
+                        name: "MarsProxies",
+                        price: "$2.5/GB起",
+                        priceValue: 25,
+                        rating: 4.2,
+                        features: ["隐私保护", "道德IP来源", "数据安全", "适合个人用户"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "注重隐私的新兴选择",
+                        website: "https://marsproxies.com",
+                        platforms: ["x", "twitter", "facebook", "general"]
+                    },
+                    {
+                        name: "ProxySeller",
+                        price: "$1.77/GB起",
+                        priceValue: 18,
+                        rating: 4.1,
+                        features: ["移动IP支持", "无限数据选项", "Reddit推荐", "灵活套餐"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "社区推荐的经济选择",
+                        website: "https://proxy-seller.com",
+                        platforms: ["tiktok", "youtube", "general"]
+                    },
+                    {
+                        name: "Rayobyte",
+                        price: "$3/GB起",
+                        priceValue: 30,
+                        rating: 4.3,
+                        features: ["10M+ 住宅IP", "99.5%正常运行时间", "高速连接", "美国本土优势"],
+                        status: "online",
+                        location: "us",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "美国本土优质代理服务",
+                        website: "https://rayobyte.com",
+                        platforms: ["facebook", "instagram", "linkedin", "general"]
+                    },
+                    {
+                        name: "Storm Proxies",
+                        price: "$50/月起",
+                        priceValue: 50,
+                        rating: 4.0,
+                        features: ["40K+ 住宅IP", "无限带宽", "快速轮换", "社交媒体优化"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "专注社交媒体的代理服务",
+                        website: "https://stormproxies.cn",
+                        platforms: ["tiktok", "x", "twitter", "instagram", "general"]
+                    },
+                    {
+                        name: "MyPrivateProxy",
+                        price: "$2.49/月起",
+                        priceValue: 25,
+                        rating: 4.2,
+                        features: ["专用代理", "99%正常运行时间", "多地区选择", "SEO优化"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "专业SEO和营销代理",
+                        website: "https://myprivateproxy.net",
+                        platforms: ["youtube", "linkedin", "facebook", "general"]
+                    },
+                    {
+                        name: "Shifter",
+                        price: "$125/月起",
+                        priceValue: 125,
+                        rating: 4.4,
+                        features: ["31M+ 住宅IP", "自动轮换", "高匿名性", "企业级"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "企业级高匿名代理解决方案",
+                        website: "https://shifter.io",
+                        platforms: ["facebook", "instagram", "youtube", "linkedin", "general"]
+                    },
+                    {
+                        name: "GeoSurf",
+                        price: "$450/月起",
+                        priceValue: 450,
+                        rating: 4.6,
+                        features: ["2M+ 住宅IP", "地理定位精准", "广告验证", "品牌保护"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "专业广告验证和品牌保护",
+                        website: "https://geosurf.com",
+                        platforms: ["facebook", "instagram", "youtube", "general"]
+                    },
+                    {
+                        name: "Soax",
+                        price: "$99/月起",
+                        priceValue: 99,
+                        rating: 4.3,
+                        features: ["8.5M+ 住宅IP", "移动代理", "高成功率", "实时监控"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "移动代理专家，适合APP测试",
+                        website: "https://soax.com",
+                        platforms: ["tiktok", "instagram", "x", "twitter", "general"]
+                    },
+                    {
+                        name: "Proxy-Cheap",
+                        price: "$0.4/GB起",
+                        priceValue: 4,
+                        rating: 4.1,
+                        features: ["6M+ 住宅IP", "超低价格", "即时激活", "24/7支持"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "市场最低价格的可靠选择",
+                        website: "https://proxy-cheap.com",
+                        platforms: ["tiktok", "facebook", "instagram", "general"]
+                    },
+                    {
+                        name: "ProxyEmpire",
+                        price: "$2.6/GB起",
+                        priceValue: 26,
+                        rating: 4.2,
+                        features: ["9M+ 住宅IP", "高速连接", "全球覆盖", "API支持"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "新兴高性能代理服务商",
+                        website: "https://proxyempire.io",
+                        platforms: ["x", "twitter", "linkedin", "youtube", "general"]
+                    },
+                    {
+                        name: "Infatica",
+                        price: "$360/月起",
+                        priceValue: 360,
+                        rating: 4.5,
+                        features: ["15M+ 住宅IP", "道德采集", "高质量IP", "企业解决方案"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "道德IP采集的行业标杆",
+                        website: "https://infatica.io",
+                        platforms: ["facebook", "instagram", "linkedin", "general"]
+                    },
+                    {
+                        name: "Blazing SEO",
+                        price: "$300/月起",
+                        priceValue: 300,
+                        rating: 4.4,
+                        features: ["专用代理", "SEO优化", "高速稳定", "美国服务器"],
+                        status: "online",
+                        location: "us",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "专业SEO代理服务提供商",
+                        website: "https://blazingseollc.com",
+                        platforms: ["youtube", "linkedin", "facebook", "general"]
+                    },
+                    {
+                        name: "PacketStream",
+                        price: "$1/GB起",
+                        priceValue: 10,
+                        rating: 4.0,
+                        features: ["P2P网络", "真实住宅IP", "按需付费", "全球节点"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "metered",
+                        protocol: "both",
+                        description: "基于P2P网络的创新代理服务",
+                        website: "https://packetstream.io",
+                        platforms: ["tiktok", "x", "twitter", "instagram", "general"]
+                    },
+                    {
+                        name: "Residential Proxies",
+                        price: "$75/月起",
+                        priceValue: 75,
+                        rating: 4.1,
+                        features: ["5M+ 住宅IP", "高匿名性", "稳定连接", "多协议支持"],
+                        status: "online",
+                        location: "global",
+                        bandwidth: "unlimited",
+                        protocol: "both",
+                        description: "专注住宅IP的专业服务商",
+                        website: "https://residential-proxies.org",
+                        platforms: ["facebook", "instagram", "youtube", "linkedin", "general"]
+                    }
+                ];
+
+                hideLoading();
+                displayResults();
+            }, 1500);
+        }
+
+        function displayResults(data = proxyData) {
+            // 按价格排序
+            const sortedData = [...data].sort((a, b) => a.priceValue - b.priceValue);
+            
+            const container = document.getElementById('resultsContainer');
+            
+            // 获取代理类型的中文名称
+            const getProxyTypeName = (type) => {
+                const typeNames = {
+                    'residential': '住宅代理',
+                    'datacenter': '数据中心代理',
+                    'rotating': '动态代理',
+                    'mobile': '移动代理'
+                };
+                return typeNames[type] || type;
+            };
+            
+            let html = `
+                <h2>💰 住宅IP代理价格对比 (按价格排序)</h2>
+                <div class="proxy-grid">
+            `;
+
+            sortedData.forEach((proxy, index) => {
+                const stars = '★'.repeat(Math.floor(proxy.rating)) + '☆'.repeat(5 - Math.floor(proxy.rating));
+                const cardClass = proxy.bestDeal ? 'proxy-card best-deal' : 'proxy-card';
+                
+                html += `
+                    <div class="${cardClass}">
+                        <div class="proxy-header">
+                            <div class="proxy-name">${proxy.name}</div>
+                            <div class="proxy-rating">
+                                <span class="stars">${stars}</span>
+                                <span>${proxy.rating}</span>
+                            </div>
+                        </div>
+                        <div class="proxy-price">${proxy.price}</div>
+                        <div class="proxy-type-badge">
+                            <small>类型: ${getProxyTypeName(proxy.proxyType)}</small>
+                        </div>
+                        <div class="platform-support">
+                            <small>支持平台: ${proxy.platforms ? proxy.platforms.map(p => p.toUpperCase()).join(', ') : '通用'}</small>
+                        </div>
+                        <ul class="proxy-features">
+                            ${proxy.features.map(feature => `<li>${feature}</li>`).join('')}
+                        </ul>
+                        <div class="proxy-actions">
+                            <button class="btn btn-primary btn-small" onclick="viewDetails('${proxy.name}')">查看详情</button>
+                            <button class="btn btn-secondary btn-small" onclick="addToCompare('${proxy.name}')">添加对比</button>
+                            <button class="btn btn-success btn-small" onclick="buyProxy('${proxy.name}')">购买</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                </div>
+                <div class="report-section">
+                    <h3>🏆 最便宜住宅IP服务综合报告</h3>
+                    <div class="report-content">
+                        <div class="top-picks">
+                            <div class="pick-card winner">
+                                <div class="pick-header">
+                                    <span class="crown">👑</span>
+                                    <h4>最佳性价比选择</h4>
+                                </div>
+                                <div class="pick-details">
+                                    <h5>Webshare - $0.3/GB起</h5>
+                                    <p>✅ 超低价格，适合预算有限的用户<br>
+                                    ✅ 提供免费试用<br>
+                                    ✅ 定制化方案<br>
+                                    ✅ 适合初创企业和个人开发者</p>
+                                </div>
+                            </div>
+                            
+                            <div class="pick-card">
+                                <div class="pick-header">
+                                    <span class="medal">🥈</span>
+                                    <h4>最佳月付选择</h4>
+                                </div>
+                                <div class="pick-details">
+                                    <h5>IPRoyal - $7/月起</h5>
+                                    <p>✅ 固定月费，无流量限制<br>
+                                    ✅ 5M+ 住宅IP池<br>
+                                    ✅ 99%正常运行时间<br>
+                                    ✅ 24/7客服支持</p>
+                                </div>
+                            </div>
+                            
+                            <div class="pick-card">
+                                <div class="pick-header">
+                                    <span class="medal">🥉</span>
+                                    <h4>最佳平衡选择</h4>
+                                </div>
+                                <div class="pick-details">
+                                    <h5>ProxySeller - $1.77/GB起</h5>
+                                    <p>✅ Reddit社区推荐<br>
+                                    ✅ 移动IP支持<br>
+                                    ✅ 无限数据选项<br>
+                                    ✅ 灵活套餐配置</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="price-analysis">
+                            <h4>💰 价格分析总结</h4>
+                            <div class="analysis-grid">
+                                <div class="analysis-item">
+                                    <strong>超低价格区间 ($0.3-$2.5/GB):</strong>
+                                    <p>Webshare、MarsProxies - 适合轻度使用和测试</p>
+                                </div>
+                                <div class="analysis-item">
+                                    <strong>经济实用区间 ($4.5-$7/月):</strong>
+                                    <p>IPRoyal、Smartproxy - 最佳性价比，适合中小企业</p>
+                                </div>
+                                <div class="analysis-item">
+                                    <strong>企业级区间 ($8-$15/GB):</strong>
+                                    <p>Oxylabs、Bright Data、NetNut - 高性能，适合大规模应用</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="recommendations">
+                            <h4>🎯 使用建议</h4>
+                            <ul>
+                                <li><strong>个人开发者/学习用途:</strong> 选择 Webshare 或 IPRoyal</li>
+                                <li><strong>小型企业/初创公司:</strong> 推荐 IPRoyal 或 ProxySeller</li>
+                                <li><strong>中型企业:</strong> 考虑 Smartproxy 或 MarsProxies</li>
+                                <li><strong>大型企业/高并发需求:</strong> 选择 Oxylabs 或 Bright Data</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="comparison-table">
+                    <h3>📊 详细价格对比表</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>服务商</th>
+                                <th>月费价格</th>
+                                <th>评分</th>
+                                <th>IP数量</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            sortedData.forEach(proxy => {
+                const statusClass = proxy.status === 'online' ? 'status-online' : 'status-offline';
+                const ipCount = proxy.features[0];
+                
+                html += `
+                    <tr>
+                        <td><strong>${proxy.name}</strong></td>
+                        <td><span class="price-highlight">${proxy.price}</span></td>
+                        <td>${proxy.rating}/5.0</td>
+                        <td>${ipCount}</td>
+                        <td><span class="status-indicator ${statusClass}"></span>在线</td>
+                        <td>
+                            <button class="btn btn-primary btn-small" onclick="selectProxy('${proxy.name}')">选择此服务</button>
+                            <button class="btn btn-success btn-small" onclick="buyProxy('${proxy.name}')">购买</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function viewDetails(proxyName) {
+            alert(`查看 ${proxyName} 的详细信息\n\n这里将显示更多技术规格、使用条款和客户评价。`);
+        }
+
+        function addToCompare(proxyName) {
+            alert(`已将 ${proxyName} 添加到对比列表\n\n您可以选择多个服务进行详细对比。`);
+        }
+
+        function selectProxy(proxyName) {
+            const proxy = proxyData.find(p => p.name === proxyName);
+            if (proxy) {
+                alert(`您选择了: ${proxyName}\n价格: ${proxy.price}\n评分: ${proxy.rating}/5.0\n\n这是一个很好的选择！`);
+            }
+        }
+
+        // 购买代理功能
+        function buyProxy(proxyName) {
+            const proxy = proxyData.find(p => p.name === proxyName);
+            if (proxy && proxy.website) {
+                console.log(`用户点击购买: ${proxyName}`);
+                window.open(proxy.website, '_blank');
+            } else {
+                alert('抱歉，暂时无法跳转到该代理商官网');
+            }
+        }
+
+        // 平台搜索功能
+        function searchByPlatform() {
+            const platformInput = document.getElementById('platformSearch').value.toLowerCase().trim();
+            
+            if (!platformInput) {
+                alert('请输入平台名称，如：TikTok, Facebook, X 等');
+                return;
+            }
+
+            // 显示推荐区域
+            const suggestionsDiv = document.getElementById('platformSuggestions');
+            const recommendationText = document.getElementById('recommendationText');
+            
+            // 根据平台搜索匹配的代理
+            const matchedProxies = proxyData.filter(proxy => 
+                proxy.platforms.some(platform => 
+                    platform.toLowerCase().includes(platformInput) || 
+                    platformInput.includes(platform.toLowerCase())
+                )
+            );
+
+            if (matchedProxies.length > 0) {
+                // 按评分排序
+                matchedProxies.sort((a, b) => b.rating - a.rating);
+                
+                let recommendationHTML = `
+                    <div class="recommendation-text">
+                        <strong>为 "${platformInput.toUpperCase()}" 平台推荐以下代理服务：</strong><br><br>
+                `;
+                
+                matchedProxies.slice(0, 5).forEach((proxy, index) => {
+                    const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '⭐';
+                    recommendationHTML += `
+                        ${medal} <strong>${proxy.name}</strong> - ${proxy.price} (评分: ${proxy.rating}/5.0)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;特色: ${proxy.features.slice(0, 2).join(', ')}<br><br>
+                    `;
+                });
+                
+                recommendationHTML += `</div>`;
+                recommendationText.innerHTML = recommendationHTML;
+                
+                // 过滤显示匹配的代理
+                filterProxiesByPlatform(matchedProxies);
+                
+            } else {
+                recommendationText.innerHTML = `
+                    <div class="recommendation-text">
+                        <strong>抱歉，没有找到专门适合 "${platformInput.toUpperCase()}" 平台的代理服务。</strong><br>
+                        建议选择支持"通用"标签的代理服务，它们通常适用于各种平台。
+                    </div>
+                `;
+                
+                // 显示通用代理
+                const generalProxies = proxyData.filter(proxy => 
+                    proxy.platforms.includes('general')
+                );
+                filterProxiesByPlatform(generalProxies);
+            }
+            
+            suggestionsDiv.style.display = 'block';
+        }
+
+        // 快速搜索功能
+        function quickSearch(platform) {
+            document.getElementById('platformSearch').value = platform;
+            searchByPlatform();
+        }
+
+        // 根据平台过滤代理显示
+        function filterProxiesByPlatform(filteredProxies) {
+            const container = document.getElementById('resultsContainer');
+            
+            if (filteredProxies.length === 0) {
+                container.innerHTML = '<p>没有找到匹配的代理服务</p>';
+                return;
+            }
+
+            // 获取代理类型的中文名称
+            const getProxyTypeName = (type) => {
+                const typeNames = {
+                    'residential': '住宅代理',
+                    'datacenter': '数据中心代理',
+                    'rotating': '动态代理',
+                    'mobile': '移动代理'
+                };
+                return typeNames[type] || type;
+            };
+
+            let html = `
+                <h2>🎯 平台推荐结果 (按评分排序)</h2>
+                <div class="proxy-grid">
+            `;
+
+            filteredProxies.forEach((proxy, index) => {
+                const stars = '★'.repeat(Math.floor(proxy.rating)) + '☆'.repeat(5 - Math.floor(proxy.rating));
+                const cardClass = index === 0 ? 'proxy-card best-deal' : 'proxy-card';
+                
+                html += `
+                    <div class="${cardClass}">
+                        <div class="proxy-header">
+                            <div class="proxy-name">${proxy.name}</div>
+                            <div class="proxy-rating">
+                                <span class="stars">${stars}</span>
+                                <span>${proxy.rating}</span>
+                            </div>
+                        </div>
+                        <div class="proxy-price">${proxy.price}</div>
+                        <div class="proxy-type-badge">
+                            <small>类型: ${getProxyTypeName(proxy.proxyType)}</small>
+                        </div>
+                        <div class="platform-support">
+                            <small>支持平台: ${proxy.platforms.map(p => p.toUpperCase()).join(', ')}</small>
+                        </div>
+                        <ul class="proxy-features">
+                            ${proxy.features.map(feature => `<li>${feature}</li>`).join('')}
+                        </ul>
+                        <div class="proxy-actions">
+                            <button class="btn btn-primary btn-small" onclick="viewDetails('${proxy.name}')">查看详情</button>
+                            <button class="btn btn-secondary btn-small" onclick="addToCompare('${proxy.name}')">添加对比</button>
+                            <button class="btn btn-success btn-small" onclick="buyProxy('${proxy.name}')">购买</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // 过滤功能
+        function applyFilters() {
+            if (proxyData.length === 0) {
+                console.log('没有数据可过滤');
+                return;
+            }
+
+            const proxyTypeFilter = document.getElementById('proxyTypeFilter').value;
+            const priceFilter = document.getElementById('priceFilter').value;
+            const locationFilter = document.getElementById('locationFilter').value;
+            const bandwidthFilter = document.getElementById('bandwidthFilter').value;
+            const protocolFilter = document.getElementById('protocolFilter').value;
+
+            let filteredData = proxyData.filter(proxy => {
+                // 代理类型过滤
+                if (proxyTypeFilter && proxy.proxyType !== proxyTypeFilter) {
+                    return false;
+                }
+
+                // 价格过滤
+                if (priceFilter) {
+                    const price = proxy.priceValue;
+                    switch (priceFilter) {
+                        case '0-50':
+                            if (price > 50) return false;
+                            break;
+                        case '50-100':
+                            if (price < 50 || price > 100) return false;
+                            break;
+                        case '100-200':
+                            if (price < 100 || price > 200) return false;
+                            break;
+                        case '200+':
+                            if (price < 200) return false;
+                            break;
+                    }
+                }
+
+                // 地理位置过滤
+                if (locationFilter && proxy.location !== locationFilter) {
+                    return false;
+                }
+
+                // 带宽类型过滤
+                if (bandwidthFilter && proxy.bandwidth !== bandwidthFilter) {
+                    return false;
+                }
+
+                // 协议支持过滤
+                if (protocolFilter && proxy.protocol !== protocolFilter) {
+                    return false;
+                }
+
+                return true;
+            });
+
+            // 显示过滤结果
+            displayResults(filteredData);
+        }
+
+        // 为过滤器添加事件监听
+        document.addEventListener('DOMContentLoaded', function() {
+            const filters = ['proxyTypeFilter', 'priceFilter', 'locationFilter', 'bandwidthFilter', 'protocolFilter'];
+            filters.forEach(filterId => {
+                document.getElementById(filterId).addEventListener('change', applyFilters);
+            });
+            
+            // 为平台搜索输入框添加回车键监听
+            document.getElementById('platformSearch').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchByPlatform();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
