@@ -296,6 +296,46 @@
             z-index: 1000;
         }
 
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 40px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+        }
+
         @media (max-width: 768px) {
             .form-row {
                 grid-template-columns: 1fr;
@@ -327,7 +367,7 @@
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="showTab('overview')">概览统计</button>
             <button class="nav-tab" onclick="showTab('list')">代理列表</button>
-            <button class="nav-tab" onclick="showTab('add')">添加代理</button>
+            <button class="nav-tab" onclick="openAddModal()">添加代理</button>
         </div>
 
         <div class="tab-content">
@@ -341,95 +381,145 @@
 
             <!-- 代理列表 -->
             <div id="list" class="tab-pane">
+                <div id="list-message"></div>
                 <div id="proxy-list-container" class="loading">
                     <div class="spinner"></div>
                     <p>加载代理列表中...</p>
                 </div>
             </div>
 
-            <!-- 添加代理 -->
+            <!-- 添加代理 (此标签页内容将通过模态框处理) -->
             <div id="add" class="tab-pane">
-                <h2 style="margin-bottom: 30px; color: #2c3e50;">添加新的代理服务商</h2>
-                <div id="add-message"></div>
-                <form id="add-proxy-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name">服务商名称 *</label>
-                            <input type="text" id="name" name="name" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="website">官网链接 *</label>
-                            <input type="url" id="website" name="website" class="form-control" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="price">价格显示 *</label>
-                            <input type="text" id="price" name="price" class="form-control" placeholder="例如: $5.99/月" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="priceValue">价格数值 *</label>
-                            <input type="number" id="priceValue" name="priceValue" class="form-control" step="0.01" min="0" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="rating">评分 (1-5) *</label>
-                            <input type="number" id="rating" name="rating" class="form-control" min="1" max="5" step="0.1" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="category">类别 *</label>
-                            <select id="category" name="category" class="form-control" required>
-                                <option value="">选择类别</option>
-                                <option value="budget">经济型</option>
-                                <option value="value">性价比</option>
-                                <option value="premium">高端型</option>
-                                <option value="enterprise">企业级</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="description">描述 *</label>
-                        <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="features">功能特性 (每行一个) *</label>
-                        <textarea id="features" name="features" class="form-control features-input" rows="5" placeholder="例如:&#10;无限带宽&#10;全球IP池&#10;24/7支持&#10;99.9%正常运行时间" required></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-success">添加代理服务商</button>
-                </form>
             </div>
+        </div>
+    </div>
+
+    <!-- 添加/编辑代理模态框 -->
+    <div id="proxy-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title" style="margin-bottom: 30px; color: #2c3e50;">添加新的代理服务商</h2>
+            <div id="modal-message"></div>
+            <form id="proxy-form">
+                <input type="hidden" id="proxy-id" name="proxy-id">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">服务商名称 *</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="website">官网链接 *</label>
+                        <input type="url" id="website" name="website" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="price">价格显示 *</label>
+                        <input type="text" id="price" name="price" class="form-control" placeholder="例如: $5.99/月" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="priceValue">价格数值 *</label>
+                        <input type="number" id="priceValue" name="priceValue" class="form-control" step="0.01" min="0" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="rating">评分 (1-5) *</label>
+                        <input type="number" id="rating" name="rating" class="form-control" min="1" max="5" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">类别 *</label>
+                        <select id="category" name="category" class="form-control" required>
+                            <option value="">选择类别</option>
+                            <option value="budget">经济型</option>
+                            <option value="value">性价比</option>
+                            <option value="premium">高端型</option>
+                            <option value="enterprise">企业级</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">描述 *</label>
+                    <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="features">功能特性 (每行一个) *</label>
+                    <textarea id="features" name="features" class="form-control features-input" rows="5" placeholder="例如:&#10;无限带宽&#10;全球IP池&#10;24/7支持&#10;99.9%正常运行时间" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-success">保存</button>
+            </form>
         </div>
     </div>
 
     <script>
         const API_BASE = '/api';
-        let currentEditId = null;
+        const modal = document.getElementById('proxy-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const proxyForm = document.getElementById('proxy-form');
+        const modalMessage = document.getElementById('modal-message');
 
         // 标签页切换
         function showTab(tabName) {
-            // 隐藏所有标签页
-            document.querySelectorAll('.tab-pane').forEach(pane => {
-                pane.classList.remove('active');
-            });
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-
-            // 显示选中的标签页
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
+            document.querySelector(`.nav-tab[onclick*="'${tabName}'"]`).classList.add('active');
+            if (tabName === 'overview') loadStats();
+            if (tabName === 'list') loadProxyList();
+        }
 
-            // 加载对应数据
-            if (tabName === 'overview') {
-                loadStats();
-            } else if (tabName === 'list') {
-                loadProxyList();
+        // 打开模态框 (添加模式)
+        function openAddModal() {
+            proxyForm.reset();
+            document.getElementById('proxy-id').value = '';
+            modalTitle.textContent = '添加新的代理服务商';
+            proxyForm.querySelector('button[type="submit"]').textContent = '添加代理';
+            proxyForm.querySelector('button[type="submit"]').className = 'btn btn-success';
+            modal.style.display = 'block';
+        }
+
+        // 打开模态框 (编辑模式)
+        async function openEditModal(id) {
+            proxyForm.reset();
+            try {
+                const response = await fetch(`${API_BASE}/proxies/${id}`);
+                if (!response.ok) throw new Error('代理信息加载失败');
+                const proxy = await response.json();
+                
+                document.getElementById('proxy-id').value = proxy.id;
+                document.getElementById('name').value = proxy.name;
+                document.getElementById('website').value = proxy.website;
+                document.getElementById('price').value = proxy.price;
+                document.getElementById('priceValue').value = proxy.priceValue;
+                document.getElementById('rating').value = proxy.rating;
+                document.getElementById('category').value = proxy.category;
+                document.getElementById('description').value = proxy.description;
+                document.getElementById('features').value = proxy.features.join('\n');
+
+                modalTitle.textContent = '编辑代理服务商';
+                proxyForm.querySelector('button[type="submit"]').textContent = '更新代理';
+                proxyForm.querySelector('button[type="submit"]').className = 'btn btn-warning';
+                modal.style.display = 'block';
+            } catch (error) {
+                showModalMessage('加载代理信息失败: ' + error.message, 'error');
+            }
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            modal.style.display = 'none';
+            modalMessage.innerHTML = '';
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
             }
         }
 
@@ -438,69 +528,40 @@
             try {
                 const response = await fetch(`${API_BASE}/stats`);
                 const stats = await response.json();
-                
                 const container = document.getElementById('stats-container');
-
                 if (stats.error) {
                     container.innerHTML = `<div class="alert alert-error">加载统计数据失败: ${stats.error}</div>`;
                     return;
                 }
-
                 if (stats.proxyCount === 0) {
                     container.innerHTML = '<p style="text-align: center; color: #6c757d; padding: 40px;">暂无代理服务商数据，无法生成统计信息。</p>';
                     return;
                 }
-
                 const countryStatsHtml = Object.entries(stats.countryStats || {}).map(([country, count]) => `
                     <div class="stat-card">
                         <div class="stat-number">${count}</div>
                         <div class="stat-label">${country}</div>
                     </div>
                 `).join('');
-
                 container.innerHTML = `
                     <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-number">${stats.proxyCount}</div>
-                            <div class="stat-label">代理总数</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">${stats.totalTrafficGB}</div>
-                            <div class="stat-label">总流量 (GB)</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">$${stats.avgPricePerGB}</div>
-                            <div class="stat-label">平均价格 ($/GB)</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">$${stats.minPrice}</div>
-                            <div class="stat-label">最低价格 ($/GB)</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">$${stats.maxPrice}</div>
-                            <div class="stat-label">最高价格 ($/GB)</div>
-                        </div>
+                        <div class="stat-card"><div class="stat-number">${stats.proxyCount}</div><div class="stat-label">代理总数</div></div>
+                        <div class="stat-card"><div class="stat-number">${stats.totalTrafficGB}</div><div class="stat-label">总流量 (GB)</div></div>
+                        <div class="stat-card"><div class="stat-number">$${stats.avgPricePerGB}</div><div class="stat-label">平均价格 ($/GB)</div></div>
+                        <div class="stat-card"><div class="stat-number">$${stats.minPrice}</div><div class="stat-label">最低价格 ($/GB)</div></div>
+                        <div class="stat-card"><div class="stat-number">$${stats.maxPrice}</div><div class="stat-label">最高价格 ($/GB)</div></div>
                     </div>
                     <h3 style="margin-bottom: 20px; color: #2c3e50;">国家/地区分布</h3>
-                    <div class="stats-grid">
-                        ${countryStatsHtml.length > 0 ? countryStatsHtml : '<p style="text-align: center; color: #6c757d; padding: 20px;">无国家/地区数据</p>'}
-                    </div>
+                    <div class="stats-grid">${countryStatsHtml || '<p>无国家/地区数据</p>'}</div>
                 `;
             } catch (error) {
-                document.getElementById('stats-container').innerHTML = `
-                    <div class="alert alert-error">加载统计数据失败: ${error.message}</div>
-                `;
+                document.getElementById('stats-container').innerHTML = `<div class="alert alert-error">加载统计数据失败: ${error.message}</div>`;
             }
         }
 
         // 获取类别中文名称
         function getCategoryName(category) {
-            const names = {
-                'budget': '经济型',
-                'value': '性价比',
-                'premium': '高端型',
-                'enterprise': '企业级'
-            };
+            const names = { 'budget': '经济型', 'value': '性价比', 'premium': '高端型', 'enterprise': '企业级' };
             return names[category] || category;
         }
 
@@ -509,13 +570,11 @@
             try {
                 const response = await fetch(`${API_BASE}/proxies`);
                 const proxies = await response.json();
-                
                 const container = document.getElementById('proxy-list-container');
                 if (proxies.length === 0) {
                     container.innerHTML = '<p style="text-align: center; color: #6c757d; padding: 40px;">暂无代理服务商数据</p>';
                     return;
                 }
-
                 container.innerHTML = `
                     <div class="proxy-list">
                         ${proxies.map(proxy => `
@@ -539,7 +598,7 @@
                                     <strong>描述:</strong> ${proxy.description || 'N/A'}
                                 </div>
                                 <div class="proxy-actions">
-                                    <button class="btn btn-warning" onclick="editProxy('${proxy.id}')">编辑</button>
+                                    <button class="btn btn-warning" onclick="openEditModal('${proxy.id}')">编辑</button>
                                     <button class="btn btn-danger" onclick="deleteProxy('${proxy.id}')">删除</button>
                                 </div>
                             </div>
@@ -547,72 +606,32 @@
                     </div>
                 `;
             } catch (error) {
-                document.getElementById('proxy-list-container').innerHTML = `
-                    <div class="alert alert-error">加载代理列表失败: ${error.message}</div>
-                `;
-            }
-        }
-
-        // 编辑代理
-        async function editProxy(id) {
-            try {
-                const response = await fetch(`${API_BASE}/proxies/${id}`);
-                const proxy = await response.json();
-                
-                currentEditId = id;
-                
-                // 填充表单
-                document.getElementById('name').value = proxy.name;
-                document.getElementById('website').value = proxy.website;
-                document.getElementById('price').value = proxy.price;
-                document.getElementById('priceValue').value = proxy.priceValue;
-                document.getElementById('rating').value = proxy.rating;
-                document.getElementById('category').value = proxy.category;
-                document.getElementById('description').value = proxy.description;
-                document.getElementById('features').value = proxy.features.join('\n');
-                
-                // 切换到添加标签页
-                showTab('add');
-                document.querySelector('[onclick="showTab(\'add\')"]').click();
-                
-                // 更改按钮文本
-                const submitBtn = document.querySelector('#add-proxy-form button[type="submit"]');
-                submitBtn.textContent = '更新代理服务商';
-                submitBtn.className = 'btn btn-warning';
-                
-            } catch (error) {
-                alert('加载代理信息失败: ' + error.message);
+                document.getElementById('proxy-list-container').innerHTML = `<div class="alert alert-error">加载代理列表失败: ${error.message}</div>`;
             }
         }
 
         // 删除代理
         async function deleteProxy(id) {
-            if (!confirm('确定要删除这个代理服务商吗？')) {
-                return;
-            }
-            
+            if (!confirm('确定要删除这个代理服务商吗？')) return;
             try {
-                const response = await fetch(`${API_BASE}/proxies/${id}`, {
-                    method: 'DELETE'
-                });
-                
+                const response = await fetch(`${API_BASE}/proxies/${id}`, { method: 'DELETE' });
                 if (response.ok) {
-                    showMessage('代理服务商删除成功！', 'success');
+                    showListMessage('代理服务商删除成功！', 'success');
                     loadProxyList();
                 } else {
                     const error = await response.json();
                     throw new Error(error.error);
                 }
             } catch (error) {
-                showMessage('删除失败: ' + error.message, 'error');
+                showListMessage('删除失败: ' + error.message, 'error');
             }
         }
 
         // 表单提交
-        document.getElementById('add-proxy-form').addEventListener('submit', async (e) => {
+        proxyForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const formData = new FormData(e.target);
+            const id = formData.get('proxy-id');
             const data = {
                 name: formData.get('name'),
                 website: formData.get('website'),
@@ -623,49 +642,43 @@
                 description: formData.get('description'),
                 features: formData.get('features').split('\n').filter(f => f.trim())
             };
-            
+
             try {
-                const url = currentEditId ? `${API_BASE}/proxies/${currentEditId}` : `${API_BASE}/proxies`;
-                const method = currentEditId ? 'PUT' : 'POST';
-                
+                const url = id ? `${API_BASE}/proxies/${id}` : `${API_BASE}/proxies`;
+                const method = id ? 'PUT' : 'POST';
                 const response = await fetch(url, {
                     method: method,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                
+
                 if (response.ok) {
-                    const message = currentEditId ? '代理服务商更新成功！' : '代理服务商添加成功！';
-                    showMessage(message, 'success');
-                    e.target.reset();
-                    resetForm();
-                    loadProxyList();
+                    const message = id ? '代理服务商更新成功！' : '代理服务商添加成功！';
+                    showModalMessage(message, 'success');
+                    setTimeout(() => {
+                        closeModal();
+                        loadProxyList();
+                        loadStats();
+                    }, 1500);
                 } else {
                     const error = await response.json();
                     throw new Error(error.error);
                 }
             } catch (error) {
-                showMessage('操作失败: ' + error.message, 'error');
+                showModalMessage('操作失败: ' + error.message, 'error');
             }
         });
 
-        // 重置表单
-        function resetForm() {
-            currentEditId = null;
-            const submitBtn = document.querySelector('#add-proxy-form button[type="submit"]');
-            submitBtn.textContent = '添加代理服务商';
-            submitBtn.className = 'btn btn-success';
+        // 在列表顶部显示消息
+        function showListMessage(message, type) {
+            const container = document.getElementById('list-message');
+            container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => container.innerHTML = '', 5000);
         }
 
-        // 显示消息
-        function showMessage(message, type) {
-            const container = document.getElementById('add-message');
-            container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
-            setTimeout(() => {
-                container.innerHTML = '';
-            }, 5000);
+        // 在模态框内显示消息
+        function showModalMessage(message, type) {
+            modalMessage.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
         }
 
         // 页面加载时初始化
