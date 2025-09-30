@@ -5,6 +5,13 @@ export async function onRequest(context) {
   const { env } = context;
   const kv = env.PROXIES_KV;
 
+  if (!kv) {
+    return new Response(JSON.stringify({ error: "KV namespace PROXIES_KV is not bound. Please check your wrangler.toml and Cloudflare Pages settings." }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   const { request } = context;
   const url = new URL(request.url);
 

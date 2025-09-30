@@ -3,11 +3,14 @@ export async function onRequest(context) {
     const { env } = context;
     const kv = env.PROXIES_KV;
 
-    try {
-        if (!kv) {
-            throw new Error("KV namespace is not bound. Please configure PROXIES_KV in your Cloudflare Pages settings.");
-        }
+    if (!kv) {
+        return new Response(JSON.stringify({ error: "KV namespace PROXIES_KV is not bound. Please check your wrangler.toml and Cloudflare Pages settings." }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
 
+    try {
         const list = await kv.list();
         if (list.keys.length === 0) {
             return new Response(JSON.stringify({

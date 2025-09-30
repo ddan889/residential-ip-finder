@@ -1,2 +1,11 @@
 name = "residential-ip-finder"
 compatibility_date = "2024-04-05"
+
+# KV binding for Cloudflare Pages Functions.
+# For production deployments via Git, you MUST also bind this in the
+# Cloudflare Pages dashboard under:
+# Settings > Functions > KV namespace bindings
+[[kv_namespaces]]
+binding = "PROXIES_KV"
+id = "0f259d5b79c34591b9315b3f3b2a5e7a" # Replace with your actual KV namespace ID
+preview_id = "0f259d5b79c34591b9315b3f3b2a5e7a" # Replace with your actual preview KV namespace ID
