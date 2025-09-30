@@ -457,7 +457,632 @@
     </div>
 
     <script>
-        const API_BASE = '/api';
+        let proxyData = [
+  {
+    "id": "1",
+    "name": "IPRoyal",
+    "website": "https://iproyal.com/",
+    "price": "$7/GB",
+    "priceValue": 7,
+    "rating": 4.8,
+    "category": "premium",
+    "description": "IPRoyal offers high-quality residential proxies with a large IP pool and flexible pricing.",
+    "features": [
+      "Rotating and static IPs",
+      "Pay-as-you-go option",
+      "24/7 support",
+      "API access"
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Smartproxy",
+    "website": "https://smartproxy.com/",
+    "price": "$8.5/GB",
+    "priceValue": 8.5,
+    "rating": 4.7,
+    "category": "premium",
+    "description": "Smartproxy is known for its user-friendly interface and extensive proxy network.",
+    "features": [
+      "Over 40 million IPs",
+      "Easy to use",
+      "Geo-targeting",
+      "3-day money-back guarantee"
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Oxylabs",
+    "website": "https://oxylabs.io/",
+    "price": "$15/GB",
+    "priceValue": 15,
+    "rating": 4.9,
+    "category": "enterprise",
+    "description": "Oxylabs provides premium proxy services for large-scale data scraping operations.",
+    "features": [
+      "100M+ residential IPs",
+      "AI-powered proxy management",
+      "Dedicated account manager",
+      "Real-time crawler"
+    ]
+  },
+  {
+    "id": "4",
+    "name": "Bright Data",
+    "website": "https://brightdata.com/",
+    "price": "$15/GB",
+    "priceValue": 15,
+    "rating": 4.9,
+    "category": "enterprise",
+    "description": "Bright Data (formerly Luminati) is a leading web data platform with a massive proxy network.",
+    "features": [
+      "72M+ residential IPs",
+      "Advanced geo-targeting",
+      "Proxy manager tool",
+      "Pay-per-use plans"
+    ]
+  },
+  {
+    "id": "5",
+    "name": "SOAX",
+    "website": "https://soax.com/",
+    "price": "$12/GB",
+    "priceValue": 12,
+    "rating": 4.6,
+    "category": "premium",
+    "description": "SOAX offers a reliable and flexible residential proxy service with precise targeting options.",
+    "features": [
+      "8.5M+ active IPs",
+      "City and ASN targeting",
+      "Flexible rotation settings",
+      "Free trial available"
+    ]
+  },
+  {
+    "id": "6",
+    "name": "NetNut",
+    "website": "https://netnut.io/",
+    "price": "$15/GB",
+    "priceValue": 15,
+    "rating": 4.7,
+    "category": "enterprise",
+    "description": "NetNut provides fast and reliable residential proxies directly from ISPs.",
+    "features": [
+      "Direct ISP connectivity",
+      "20M+ residential IPs",
+      "Static and rotating IPs",
+      "High success rates"
+    ]
+  },
+  {
+    "id": "7",
+    "name": "Geosurf",
+    "website": "https://www.geosurf.com/",
+    "price": "$12.5/GB",
+    "priceValue": 12.5,
+    "rating": 4.5,
+    "category": "premium",
+    "description": "Geosurf offers a premium proxy network with over 2.5 million residential IPs.",
+    "features": [
+      "Unlimited IP rotation",
+      "Sticky IP sessions",
+      "Browser extension",
+      "API for developers"
+    ]
+  },
+  {
+    "id": "8",
+    "name": "PacketStream",
+    "website": "https://packetstream.io/",
+    "price": "$1/GB",
+    "priceValue": 1,
+    "rating": 4.2,
+    "category": "budget",
+    "description": "PacketStream is a peer-to-peer proxy network offering affordable bandwidth.",
+    "features": [
+      "Low cost per GB",
+      "7M+ residential IPs",
+      "Pay-as-you-go",
+      "Easy integration"
+    ]
+  },
+  {
+    "id": "9",
+    "name": "HydraProxy",
+    "website": "https://hydraproxy.com/",
+    "price": "$5/GB",
+    "priceValue": 5,
+    "rating": 4.4,
+    "category": "value",
+    "description": "HydraProxy provides a mix of residential and mobile proxies with flexible plans.",
+    "features": [
+      "5M+ residential IPs",
+      "Mobile proxies available",
+      "Custom rotation settings",
+      "24-hour trial"
+    ]
+  },
+  {
+    "id": "10",
+    "name": "Proxy-cheap",
+    "website": "https://proxy-cheap.com/",
+    "price": "$5/GB",
+    "priceValue": 5,
+    "rating": 4.3,
+    "category": "value",
+    "description": "Proxy-cheap offers affordable residential proxies with a large IP pool.",
+    "features": [
+      "6M+ residential IPs",
+      "No monthly commitment",
+      "Sticky and rotating sessions",
+      "Live support"
+    ]
+  },
+  {
+    "id": "11",
+    "name": "Storm Proxies",
+    "website": "https://stormproxies.com/",
+    "price": "$19/month (for 5 ports)",
+    "priceValue": 19,
+    "rating": 4.1,
+    "category": "budget",
+    "description": "Storm Proxies offers unlimited bandwidth residential proxies at a fixed monthly price.",
+    "features": [
+      "Unlimited bandwidth",
+      "Rotating residential IPs",
+      "Instant setup",
+      "24-hour money-back guarantee"
+    ]
+  },
+  {
+    "id": "12",
+    "name": "Shifter",
+    "website": "https://shifter.io/",
+    "price": "$249.99/month (for 10 ports)",
+    "priceValue": 250,
+    "rating": 4.6,
+    "category": "premium",
+    "description": "Shifter (formerly Microleaves) provides a large-scale backconnect proxy network.",
+    "features": [
+      "31M+ residential IPs",
+      "Unlimited bandwidth",
+      "Geo-targeting by country",
+      "5-minute rotation"
+    ]
+  },
+  {
+    "id": "13",
+    "name": "Zyte",
+    "website": "https://www.zyte.com/",
+    "price": "$29/month (for 50k requests)",
+    "priceValue": 29,
+    "rating": 4.8,
+    "category": "enterprise",
+    "description": "Zyte (formerly Crawlera) offers a smart proxy manager for web scraping.",
+    "features": [
+      "Automatic proxy rotation",
+      "Ban detection and handling",
+      "Headless browser support",
+      "Free trial available"
+    ]
+  },
+  {
+    "id": "14",
+    "name": "Proxyrack",
+    "website": "https://www.proxyrack.com/",
+    "price": "$14.95/GB",
+    "priceValue": 14.95,
+    "rating": 4.5,
+    "category": "premium",
+    "description": "Proxyrack offers a variety of proxy types, including residential and datacenter.",
+    "features": [
+      "5M+ residential IPs",
+      "Sticky and rotating options",
+      "Unmetered bandwidth plans",
+      "3-day trial for $13.95"
+    ]
+  },
+  {
+    "id": "15",
+    "name": "Asocks",
+    "website": "https://asocks.com/",
+    "price": "$3/GB",
+    "priceValue": 3,
+    "rating": 4.3,
+    "category": "budget",
+    "description": "Asocks provides cheap and reliable residential proxies with a pay-as-you-go model.",
+    "features": [
+      "Low price per GB",
+      "7M+ residential IPs",
+      "No expiration on traffic",
+      "Free trial available"
+    ]
+  },
+  {
+    "id": "16",
+    "name": "Limeproxies",
+    "website": "https://www.limeproxies.com/",
+    "price": "$50/month (for 10 IPs)",
+    "priceValue": 50,
+    "rating": 4.2,
+    "category": "value",
+    "description": "Limeproxies offers private proxies with a focus on performance and reliability.",
+    "features": [
+      "Dedicated IPs",
+      "High-speed connections",
+      "24/7 support",
+      "3-day money-back guarantee"
+    ]
+  },
+  {
+    "id": "17",
+    "name": "Infatica",
+    "website": "https://infatica.io/",
+    "price": "$8/GB",
+    "priceValue": 8,
+    "rating": 4.4,
+    "category": "value",
+    "description": "Infatica provides a global network of residential and mobile proxies.",
+    "features": [
+      "10M+ residential IPs",
+      "Mobile IP network",
+      "Flexible pricing plans",
+      "Free trial available"
+    ]
+  },
+  {
+    "id": "18",
+    "name": "The Proxy Store",
+    "website": "https://theproxystore.com/",
+    "price": "$10/month (for 5 proxies)",
+    "priceValue": 10,
+    "rating": 4.0,
+    "category": "budget",
+    "description": "The Proxy Store offers various types of proxies, including rotating residential proxies.",
+    "features": [
+      "Unlimited bandwidth",
+      "Instant delivery",
+      "24/7 customer support",
+      "3-day refund policy"
+    ]
+  },
+  {
+    "id": "19",
+    "name": "Proxy Seller",
+    "website": "https://proxy-seller.com/",
+    "price": "$2.33/proxy/month",
+    "priceValue": 2.33,
+    "rating": 4.5,
+    "category": "value",
+    "description": "Proxy Seller provides a wide range of private proxies for various purposes.",
+    "features": [
+      "IPv4 and IPv6 proxies",
+      "SOCKS5 and HTTP/S support",
+      "24/7 technical support",
+      "24-hour money-back guarantee"
+    ]
+  },
+  {
+    "id": "20",
+    "name": "Proxy-Hub",
+    "website": "https://proxy-hub.com/",
+    "price": "$1/proxy/month",
+    "priceValue": 1,
+    "rating": 3.9,
+    "category": "budget",
+    "description": "Proxy-Hub offers cheap dedicated and semi-dedicated proxies.",
+    "features": [
+      "Unlimited bandwidth",
+      "Multiple locations",
+      "Instant setup",
+      "3-day money-back guarantee"
+    ]
+  },
+  {
+    "id": "21",
+    "name": "Webshare",
+    "website": "https://www.webshare.io/",
+    "price": "$2.99/month (for 10 proxies)",
+    "priceValue": 2.99,
+    "rating": 4.6,
+    "category": "value",
+    "description": "Webshare offers fast and affordable datacenter and residential proxies.",
+    "features": [
+      "Free proxy list",
+      "Rotating and static IPs",
+      "API access",
+      "Ethical proxy network"
+    ]
+  },
+  {
+    "id": "22",
+    "name": "Rayobyte",
+    "website": "https://rayobyte.com/",
+    "price": "$15/GB",
+    "priceValue": 15,
+    "rating": 4.7,
+    "category": "premium",
+    "description": "Rayobyte (formerly Blazing SEO) provides a variety of proxy solutions with a focus on ethics.",
+    "features": [
+      "Ethically sourced IPs",
+      "Residential and ISP proxies",
+      "2-day free trial",
+      "24/7 support"
+    ]
+  },
+  {
+    "id": "23",
+    "name": "IPFoxy",
+    "website": "https://www.ipfoxy.com/",
+    "price": "$6/GB",
+    "priceValue": 6,
+    "rating": 4.4,
+    "category": "value",
+    "description": "IPFoxy offers a range of proxy services, including residential and datacenter proxies.",
+    "features": [
+      "Pay-as-you-go option",
+      "Static and rotating IPs",
+      "API access",
+      "Free trial available"
+    ]
+  },
+  {
+    "id": "24",
+    "name": "LunaProxy",
+    "website": "https://www.lunaproxy.com/",
+    "price": "$0.8/GB",
+    "priceValue": 0.8,
+    "rating": 4.2,
+    "category": "budget",
+    "description": "LunaProxy provides affordable residential proxies with a large IP pool.",
+    "features": [
+      "90M+ residential IPs",
+      "Pay-as-you-go",
+      "City and country targeting",
+      "24/7 support"
+    ]
+  },
+  {
+    "id": "25",
+    "name": "Pia S5 Proxy",
+    "website": "https://www.piaproxy.com/",
+    "price": "$3.6/GB",
+    "priceValue": 3.6,
+    "rating": 4.3,
+    "category": "value",
+    "description": "Pia S5 Proxy offers a large SOCKS5 proxy pool for various applications.",
+    "features": [
+      "50M+ residential IPs",
+      "Country, state, city targeting",
+      "API access",
+      "Suitable for various use cases"
+    ]
+  },
+  {
+    "id": "26",
+    "name": "922 S5 Proxy",
+    "website": "https://www.922proxy.com/",
+    "price": "$0.14/IP",
+    "priceValue": 0.14,
+    "rating": 4.1,
+    "category": "budget",
+    "description": "922 S5 Proxy provides residential SOCKS5 proxies with a focus on affordability.",
+    "features": [
+      "200M+ residential IPs",
+      "Pay-per-IP model",
+      "Country, city, ISP targeting",
+      "API access"
+    ]
+  },
+  {
+    "id": "27",
+    "name": "Proxy Ipv4",
+    "website": "https://proxy-ipv4.com/",
+    "price": "$1.5/proxy/month",
+    "priceValue": 1.5,
+    "rating": 4.0,
+    "category": "budget",
+    "description": "Proxy Ipv4 offers private and shared proxies for various online tasks.",
+    "features": [
+      "Unlimited bandwidth",
+      "HTTP/S and SOCKS5 support",
+      "24/7 customer support",
+      "Instant activation"
+    ]
+  },
+  {
+    "id": "28",
+    "name": "Proxyline",
+    "website": "https://proxyline.net/",
+    "price": "$1.77/proxy/month",
+    "priceValue": 1.77,
+    "rating": 4.2,
+    "category": "value",
+    "description": "Proxyline offers a variety of private proxies with flexible rental periods.",
+    "features": [
+      "IPv4 and IPv6 proxies",
+      "SOCKS5 and HTTP/S support",
+      "24/7 technical support",
+      "Money-back guarantee"
+    ]
+  },
+  {
+    "id": "29",
+    "name": "Youproxy",
+    "website": "https://youproxy.io/",
+    "price": "$1.3/proxy/month",
+    "priceValue": 1.3,
+    "rating": 4.1,
+    "category": "budget",
+    "description": "Youproxy provides personal SOCKS5 and HTTP/S proxies for various purposes.",
+    "features": [
+      "IPv4 and IPv6 proxies",
+      "24-hour free test",
+      "24/7 support",
+      "Automatic setup"
+    ]
+  },
+  {
+    "id": "30",
+    "name": "Coronium",
+    "website": "https://coronium.io/",
+    "price": "$2.95/GB",
+    "priceValue": 2.95,
+    "rating": 4.4,
+    "category": "value",
+    "description": "Coronium offers high-quality residential proxies with a focus on speed and reliability.",
+    "features": [
+      "75M+ residential IPs",
+      "Pay-as-you-go",
+      "City and state targeting",
+      "24/7 support"
+    ]
+  },
+  {
+    "id": "31",
+    "name": "Proxywing",
+    "website": "https://www.proxywing.com/",
+    "price": "$0.4/GB",
+    "priceValue": 0.4,
+    "rating": 4.0,
+    "category": "budget",
+    "description": "Proxywing offers affordable residential proxies with a large IP pool.",
+    "features": [
+      "90M+ residential IPs",
+      "Pay-as-you-go",
+      "Country and city targeting",
+      "24/7 support"
+    ]
+  },
+  {
+    "id": "32",
+    "name": "Proxysale",
+    "website": "https://proxysale.com/",
+    "price": "$1.4/proxy/month",
+    "priceValue": 1.4,
+    "rating": 4.3,
+    "category": "value",
+    "description": "Proxysale offers a wide range of private proxies for various purposes.",
+    "features": [
+      "IPv4 and IPv6 proxies",
+      "SOCKS5 and HTTP/S support",
+      "24/7 technical support",
+      "24-hour money-back guarantee"
+    ]
+  },
+  {
+    "id": "33",
+    "name": "Spaceproxy",
+    "website": "https://spaceproxy.net/",
+    "price": "$1.79/proxy/month",
+    "priceValue": 1.79,
+    "rating": 4.2,
+    "category": "value",
+    "description": "Spaceproxy provides private proxies with a focus on stability and speed.",
+    "features": [
+      "IPv4 and IPv6 proxies",
+      "SOCKS5 and HTTP/S support",
+      "24/7 support",
+      "Automatic issuance"
+    ]
+  },
+  {
+    "id": "34",
+    "name": "Proxy World",
+    "website": "https://proxy-world.info/",
+    "price": "$1/proxy/month",
+    "priceValue": 1,
+    "rating": 3.8,
+    "category": "budget",
+    "description": "Proxy World offers cheap shared and private proxies for various tasks.",
+    "features": [
+      "Unlimited bandwidth",
+      "Multiple locations",
+      "Instant setup",
+      "24/7 support"
+    ]
+  },
+  {
+    "id": "35",
+    "name": "ProxyScrape",
+    "website": "https://proxyscrape.com/",
+    "price": "$7/GB",
+    "priceValue": 7,
+    "rating": 4.6,
+    "category": "premium",
+    "description": "ProxyScrape provides a variety of proxy services, including residential and datacenter proxies.",
+    "features": [
+      "7M+ residential IPs",
+      "Rotating and static IPs",
+      "API access",
+      "24/7 support"
+    ]
+  },
+  {
+    "id": "36",
+    "name": "Froxy",
+    "website": "https://froxy.com/",
+    "price": "$6/GB",
+    "priceValue": 6,
+    "rating": 4.4,
+    "category": "value",
+    "description": "Froxy offers a mix of residential and mobile proxies with flexible plans.",
+    "features": [
+      "8M+ residential IPs",
+      "Mobile proxies available",
+      "Custom rotation settings",
+      "3-day trial for $1.99"
+    ]
+  },
+  {
+    "id": "37",
+    "name": "Dataimpulse",
+    "website": "https://dataimpulse.com/",
+    "price": "$1/GB",
+    "priceValue": 1,
+    "rating": 4.2,
+    "category": "budget",
+    "description": "Dataimpulse offers affordable residential proxies with a pay-as-you-go model.",
+    "features": [
+      "5M+ residential IPs",
+      "Pay-as-you-go",
+      "City and country targeting",
+      "24/7 support"
+    ]
+  },
+  {
+    "id": "38",
+    "name": "Proxy-n-VPN",
+    "website": "https://www.proxy-n-vpn.com/",
+    "price": "$2.25/proxy/month",
+    "priceValue": 2.25,
+    "rating": 4.1,
+    "category": "value",
+    "description": "Proxy-n-VPN offers private and shared proxies for various online tasks.",
+    "features": [
+      "Unlimited bandwidth",
+      "Multiple locations",
+      "Instant setup",
+      "24/7 support"
+    ]
+  },
+  {
+    "id": "39",
+    "name": "PingProxies",
+    "website": "https://pingproxies.com/",
+    "price": "$10/GB",
+    "priceValue": 10,
+    "rating": 4.5,
+    "category": "premium",
+    "description": "PingProxies offers high-quality residential and ISP proxies for various use cases.",
+    "features": [
+      "ISP and residential proxies",
+      "24/7 support",
+      "Large IP pool",
+      "Flexible plans"
+    ]
+  }
+];
         const modal = document.getElementById('proxy-modal');
         const modalTitle = document.getElementById('modal-title');
         const proxyForm = document.getElementById('proxy-form');
@@ -487,10 +1112,9 @@
         async function openEditModal(id) {
             proxyForm.reset();
             try {
-                const response = await fetch(`${API_BASE}/proxies/${id}`);
-                if (!response.ok) throw new Error('代理信息加载失败');
-                const proxy = await response.json();
-                
+                const proxy = proxyData.find(p => p.id === id);
+                if (!proxy) throw new Error('代理信息加载失败');
+
                 document.getElementById('proxy-id').value = proxy.id;
                 document.getElementById('name').value = proxy.name;
                 document.getElementById('website').value = proxy.website;
@@ -526,37 +1150,46 @@
         // 加载统计数据
         async function loadStats() {
             try {
-                const response = await fetch(`${API_BASE}/stats`);
-                const stats = await response.json();
+                const stats = calculateStats();
                 const container = document.getElementById('stats-container');
-                if (stats.error) {
-                    container.innerHTML = `<div class="alert alert-error">加载统计数据失败: ${stats.error}</div>`;
-                    return;
-                }
                 if (stats.proxyCount === 0) {
                     container.innerHTML = '<p style="text-align: center; color: #6c757d; padding: 40px;">暂无代理服务商数据，无法生成统计信息。</p>';
                     return;
                 }
-                const countryStatsHtml = Object.entries(stats.countryStats || {}).map(([country, count]) => `
-                    <div class="stat-card">
-                        <div class="stat-number">${count}</div>
-                        <div class="stat-label">${country}</div>
-                    </div>
-                `).join('');
                 container.innerHTML = `
                     <div class="stats-grid">
                         <div class="stat-card"><div class="stat-number">${stats.proxyCount}</div><div class="stat-label">代理总数</div></div>
-                        <div class="stat-card"><div class="stat-number">${stats.totalTrafficGB}</div><div class="stat-label">总流量 (GB)</div></div>
-                        <div class="stat-card"><div class="stat-number">$${stats.avgPricePerGB}</div><div class="stat-label">平均价格 ($/GB)</div></div>
-                        <div class="stat-card"><div class="stat-number">$${stats.minPrice}</div><div class="stat-label">最低价格 ($/GB)</div></div>
-                        <div class="stat-card"><div class="stat-number">$${stats.maxPrice}</div><div class="stat-label">最高价格 ($/GB)</div></div>
+                        <div class="stat-card"><div class="stat-number">${stats.avgRating.toFixed(2)}</div><div class="stat-label">平均评分</div></div>
+                        <div class="stat-card"><div class="stat-number">$${stats.avgPrice.toFixed(2)}</div><div class="stat-label">平均价格 ($/GB)</div></div>
+                        <div class="stat-card"><div class="stat-number">${stats.categoryCounts.premium || 0}</div><div class="stat-label">高端型数量</div></div>
+                        <div class="stat-card"><div class="stat-number">${stats.categoryCounts.value || 0}</div><div class="stat-label">性价比数量</div></div>
+                        <div class="stat-card"><div class="stat-number">${stats.categoryCounts.budget || 0}</div><div class="stat-label">经济型数量</div></div>
                     </div>
-                    <h3 style="margin-bottom: 20px; color: #2c3e50;">国家/地区分布</h3>
-                    <div class="stats-grid">${countryStatsHtml || '<p>无国家/地区数据</p>'}</div>
                 `;
             } catch (error) {
                 document.getElementById('stats-container').innerHTML = `<div class="alert alert-error">加载统计数据失败: ${error.message}</div>`;
             }
+        }
+        
+        function calculateStats() {
+            const proxyCount = proxyData.length;
+            if (proxyCount === 0) {
+                return { proxyCount: 0 };
+            }
+            const totalRating = proxyData.reduce((sum, p) => sum + p.rating, 0);
+            const priceData = proxyData.filter(p => p.price.includes('/GB'));
+            const totalPrice = priceData.reduce((sum, p) => sum + p.priceValue, 0);
+            const categoryCounts = proxyData.reduce((counts, p) => {
+                counts[p.category] = (counts[p.category] || 0) + 1;
+                return counts;
+            }, {});
+
+            return {
+                proxyCount,
+                avgRating: totalRating / proxyCount,
+                avgPrice: totalPrice / priceData.length,
+                categoryCounts
+            };
         }
 
         // 获取类别中文名称
@@ -568,8 +1201,7 @@
         // 加载代理列表
         async function loadProxyList() {
             try {
-                const response = await fetch(`${API_BASE}/proxies`);
-                const proxies = await response.json();
+                const proxies = proxyData; // Directly use the embedded data
                 const container = document.getElementById('proxy-list-container');
                 if (proxies.length === 0) {
                     container.innerHTML = '<p style="text-align: center; color: #6c757d; padding: 40px;">暂无代理服务商数据</p>';
@@ -614,14 +1246,14 @@
         async function deleteProxy(id) {
             if (!confirm('确定要删除这个代理服务商吗？')) return;
             try {
-                const response = await fetch(`${API_BASE}/proxies/${id}`, { method: 'DELETE' });
-                if (response.ok) {
-                    showListMessage('代理服务商删除成功！', 'success');
-                    loadProxyList();
-                } else {
-                    const error = await response.json();
-                    throw new Error(error.error);
-                }
+                const index = proxyData.findIndex(p => p.id === id);
+                if (index === -1) throw new Error('代理未找到');
+                
+                proxyData.splice(index, 1);
+                showListMessage('代理服务商删除成功！', 'success');
+                loadProxyList();
+                loadStats();
+
             } catch (error) {
                 showListMessage('删除失败: ' + error.message, 'error');
             }
@@ -644,26 +1276,28 @@
             };
 
             try {
-                const url = id ? `${API_BASE}/proxies/${id}` : `${API_BASE}/proxies`;
-                const method = id ? 'PUT' : 'POST';
-                const response = await fetch(url, {
-                    method: method,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-
-                if (response.ok) {
-                    const message = id ? '代理服务商更新成功！' : '代理服务商添加成功！';
-                    showModalMessage(message, 'success');
-                    setTimeout(() => {
-                        closeModal();
-                        loadProxyList();
-                        loadStats();
-                    }, 1500);
+                if (id) {
+                    // 更新
+                    const index = proxyData.findIndex(p => p.id === id);
+                    if (index !== -1) {
+                        proxyData[index] = { ...proxyData[index], ...data, id: id };
+                    } else {
+                         throw new Error('Proxy not found for update');
+                    }
                 } else {
-                    const error = await response.json();
-                    throw new Error(error.error);
+                    // 添加
+                    data.id = new Date().getTime().toString(); // Simple unique ID
+                    proxyData.push(data);
                 }
+
+                const message = id ? '代理服务商更新成功！' : '代理服务商添加成功！';
+                showModalMessage(message, 'success');
+                setTimeout(() => {
+                    closeModal();
+                    loadProxyList();
+                    loadStats();
+                }, 1500);
+
             } catch (error) {
                 showModalMessage('操作失败: ' + error.message, 'error');
             }

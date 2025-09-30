@@ -601,6 +601,9 @@
                         <option value="both">HTTP + SOCKS5</option>
                     </select>
                 </div>
+                <div class="filter-group">
+                    <button id="search-button" class="search-button">搜索</button>
+                </div>
             </div>
         </div>
 
@@ -762,39 +765,241 @@
             // 基于真实市场调研的数据
             setTimeout(() => {
                 proxyData = [
-                    {
-                        name: "IPRoyal",
-                        price: "$7/月起",
-                        priceValue: 7,
-                        rating: 4.6,
-                        features: ["5M+ 住宅IP", "99%正常运行时间", "98.5%成功率", "24/7客服支持", "最佳性价比"],
-                        status: "online",
-                        location: "global",
-                        bandwidth: "unlimited",
-                        protocol: "both",
-                        bestDeal: true,
-                        description: "2024年最佳预算选择，适合个人和小企业",
-                        website: "https://iproyal.com",
-                        platforms: ["tiktok", "facebook", "instagram", "general"],
-                        proxyType: "residential"
-                    },
-                    {
-                        name: "Smartproxy",
-                        price: "$4.50/GB起",
-                        priceValue: 45,
-                        rating: 4.5,
-                        features: ["40M+ 住宅IP", "全球195个国家", "高速稳定", "API支持"],
-                        status: "online",
-                        location: "global",
-                        bandwidth: "metered",
-                        protocol: "both",
-                        description: "全球覆盖最广的住宅代理服务",
-                        website: "https://smartproxy.com",
-                        platforms: ["facebook", "instagram", "youtube", "general"],
-                        proxyType: "residential"
-                    },
-                    {
-                        name: "Oxylabs",
+    {
+        "name": "ProxySeller", "rating": 4.1, "price": "$1.77/月起", "priceValue": 1.77, "proxyType": "datacenter",
+        "platforms": ["X", "TWITTER", "LINKEDIN", "GENERAL"],
+        "features": ["IPv4/IPv6支持", "多国IP", "高匿名", "24/7支持"],
+        "website": "https://proxyseller.com/?from=mianfeidaili"
+    },
+    {
+        "name": "MyPrivateProxy", "rating": 4.2, "price": "$2.49/月起", "priceValue": 2.49, "proxyType": "datacenter",
+        "platforms": ["LINKEDIN", "FACEBOOK", "GENERAL"],
+        "features": ["专用代理", "高速稳定", "多地区选择", "即时激活"],
+        "website": "https://www.myprivateproxy.net/"
+    },
+    {
+        "name": "Webshare", "rating": 4.3, "price": "$2.99/月起", "priceValue": 2.99, "proxyType": "datacenter",
+        "platforms": ["TIKTOK", "FACEBOOK", "GENERAL"],
+        "features": ["1M+ 住宅IP", "超低价格", "简单易用", "快速设置"],
+        "website": "https://www.webshare.io/?referral_code=p1zhe"
+    },
+    {
+        "name": "SSLPrivateProxy", "rating": 4.1, "price": "$2.50/月起", "priceValue": 2.50, "proxyType": "datacenter",
+        "platforms": ["X", "TWITTER", "YOUTUBE", "GENERAL"],
+        "features": ["SSL加密", "专用IP", "高匿名性", "多协议支持"],
+        "website": "https://www.sslprivateproxy.com/"
+    },
+    {
+        "name": "Proxy-Cheap", "rating": 4, "price": "$2.5/月起", "priceValue": 2.5, "proxyType": "datacenter",
+        "platforms": ["YOUTUBE", "LINKEDIN", "GENERAL"],
+        "features": ["数据中心代理", "IPv4/IPv6", "高速连接", "多地区"],
+        "website": "https://proxy-cheap.com/"
+    },
+    {
+        "name": "Webshare", "rating": 4.3, "price": "$0.3/GB起", "priceValue": 0.3, "proxyType": "residential",
+        "platforms": ["TIKTOK", "INSTAGRAM", "GENERAL"],
+        "features": ["定制化方案", "高速连接", "免费试用", "适合初创企业"],
+        "website": "https://www.webshare.io/?referral_code=p1zhe"
+    },
+    {
+        "name": "Proxy-Cheap", "rating": 4.1, "price": "$0.4/GB起", "priceValue": 0.4, "proxyType": "residential",
+        "platforms": ["TIKTOK", "FACEBOOK", "INSTAGRAM", "GENERAL"],
+        "features": ["6M+ 住宅IP", "超低价格", "即时激活", "24/7支持"],
+        "website": "https://proxy-cheap.com/"
+    },
+    {
+        "name": "IPRoyal", "rating": 4.6, "price": "$7/月起", "priceValue": 7, "proxyType": "residential",
+        "platforms": ["TIKTOK", "FACEBOOK", "INSTAGRAM", "GENERAL"],
+        "features": ["5M+ 住宅IP", "99%正常运行时间", "98.5%成功率", "24/7客服支持", "最佳性价比"],
+        "website": "https://iproyal.com/?r=iproyal"
+    },
+    {
+        "name": "PacketStream", "rating": 4, "price": "$1/GB起", "priceValue": 1, "proxyType": "residential",
+        "platforms": ["TIKTOK", "X", "TWITTER", "INSTAGRAM", "GENERAL"],
+        "features": ["P2P网络", "真实住宅IP", "按需付费", "全球节点"],
+        "website": "https://packetstream.io/"
+    },
+    {
+        "name": "PacketStream", "rating": 4, "price": "$1/GB起", "priceValue": 1, "proxyType": "residential",
+        "platforms": ["TIKTOK", "X", "TWITTER", "INSTAGRAM", "GENERAL"],
+        "features": ["P2P网络", "真实住宅IP", "按需付费", "全球节点"],
+        "website": "https://packetstream.io/"
+    },
+    {
+        "name": "Oxylabs", "rating": 4.7, "price": "$15/月起", "priceValue": 15, "proxyType": "residential",
+        "platforms": ["LINKEDIN", "FACEBOOK", "X", "TWITTER", "GENERAL"],
+        "features": ["100M+ 住宅IP", "企业级服务", "专业技术支持", "高匿名性"],
+        "website": "https://oxylabs.io/"
+    },
+    {
+        "name": "MarsProxies", "rating": 4.2, "price": "$1.6/GB起", "priceValue": 1.6, "proxyType": "residential",
+        "platforms": ["INSTAGRAM", "YOUTUBE", "GENERAL"],
+        "features": ["2M+ 住宅IP", "按需付费", "全球覆盖", "API集成"],
+        "website": "https://marsproxies.com/"
+    },
+    {
+        "name": "ProxySeller", "rating": 4.1, "price": "$1.77/GB起", "priceValue": 1.77, "proxyType": "mobile",
+        "platforms": ["TIKTOK", "YOUTUBE", "GENERAL"],
+        "features": ["移动IP支持", "无限数据选项", "Reddit推荐", "灵活套餐"],
+        "website": "https://proxyseller.com/?from=mianfeidaili"
+    },
+    {
+        "name": "NetNut", "rating": 4.4, "price": "$20/月起", "priceValue": 20, "proxyType": "residential",
+        "platforms": ["TIKTOK", "INSTAGRAM", "X", "TWITTER", "GENERAL"],
+        "features": ["20M+ 住宅IP", "ISP级代理", "高速连接", "专业支持"],
+        "website": "https://netnut.io/"
+    },
+    {
+        "name": "MarsProxies", "rating": 4.2, "price": "$2.5/GB起", "priceValue": 2.5, "proxyType": "residential",
+        "platforms": ["X", "TWITTER", "FACEBOOK", "GENERAL"],
+        "features": ["隐私保护", "道德IP来源", "数据安全", "适合个人用户"],
+        "website": "https://marsproxies.com/"
+    },
+    {
+        "name": "MyPrivateProxy", "rating": 4.2, "price": "$2.49/月起", "priceValue": 2.49, "proxyType": "datacenter",
+        "platforms": ["YOUTUBE", "LINKEDIN", "FACEBOOK", "GENERAL"],
+        "features": ["专用代理", "99%正常运行时间", "多地区选择", "SEO优化"],
+        "website": "https://www.myprivateproxy.net/"
+    },
+    {
+        "name": "ProxyEmpire", "rating": 4.2, "price": "$2.6/GB起", "priceValue": 2.6, "proxyType": "residential",
+        "platforms": ["X", "TWITTER", "LINKEDIN", "YOUTUBE", "GENERAL"],
+        "features": ["9M+ 住宅IP", "高速连接", "全球覆盖", "API支持"],
+        "website": "https://proxyempire.io/"
+    },
+    {
+        "name": "Rayobyte", "rating": 4.3, "price": "$3/GB起", "priceValue": 3, "proxyType": "residential",
+        "platforms": ["FACEBOOK", "INSTAGRAM", "LINKEDIN", "GENERAL"],
+        "features": ["10M+ 住宅IP", "99.5%正常运行时间", "高速连接", "美国本土优势"],
+        "website": "https://rayobyte.com/"
+    },
+    {
+        "name": "Smartproxy", "rating": 4.5, "price": "$4.50/GB起", "priceValue": 4.5, "proxyType": "residential",
+        "platforms": ["FACEBOOK", "INSTAGRAM", "YOUTUBE", "GENERAL"],
+        "features": ["40M+ 住宅IP", "全球195个国家", "高速稳定", "API支持"],
+        "website": "https://smartproxy.com/"
+    },
+    {
+        "name": "Smartproxy", "rating": 4.5, "price": "$4.50/GB起", "priceValue": 4.5, "proxyType": "residential",
+        "platforms": ["X", "TWITTER", "LINKEDIN", "GENERAL"],
+        "features": ["65M+ 住宅IP", "99.99%正常运行时间", "99.47%成功率", "用户友好界面"],
+        "website": "https://smartproxy.com/"
+    },
+    {
+        "name": "Storm Proxies", "rating": 4, "price": "$50/月起", "priceValue": 50, "proxyType": "rotating",
+        "platforms": ["FACEBOOK", "INSTAGRAM", "GENERAL"],
+        "features": ["40K+ 住宅IP", "轮换代理", "高速连接", "美国专线"],
+        "website": "https://stormproxies.com/"
+    },
+    {
+        "name": "Storm Proxies", "rating": 4, "price": "$50/月起", "priceValue": 50, "proxyType": "rotating",
+        "platforms": ["TIKTOK", "X", "TWITTER", "INSTAGRAM", "GENERAL"],
+        "features": ["40K+ 住宅IP", "无限带宽", "快速轮换", "社交媒体优化"],
+        "website": "https://stormproxies.com/"
+    },
+    {
+        "name": "Residential Proxies", "rating": 4.1, "price": "$75/月起", "priceValue": 75, "proxyType": "residential",
+        "platforms": ["FACEBOOK", "INSTAGRAM", "YOUTUBE", "LINKEDIN", "GENERAL"],
+        "features": ["5M+ 住宅IP", "高匿名性", "稳定连接", "多协议支持"],
+        "website": "https://residential-proxies.org/"
+    },
+    {
+        "name": "Residential Proxies", "rating": 4.1, "price": "$75/月起", "priceValue": 75, "proxyType": "residential",
+        "platforms": ["FACEBOOK", "INSTAGRAM", "YOUTUBE", "LINKEDIN", "GENERAL"],
+        "features": ["5M+ 住宅IP", "高匿名性", "稳定连接", "多协议支持"],
+        "website": "https://residential-proxies.org/"
+    },
+    {
+        "name": "Mobile Proxy Space", "rating": 4.5, "price": "$80/月起", "priceValue": 80, "proxyType": "mobile",
+        "platforms": ["TIKTOK", "INSTAGRAM", "FACEBOOK", "GENERAL"],
+        "features": ["4G/5G移动IP", "真实设备", "动态轮换", "全球运营商"],
+        "website": "https://mobileproxy.space/"
+    },
+    {
+        "name": "Oxylabs", "rating": 4.7, "price": "$8/GB起", "priceValue": 8, "proxyType": "residential",
+        "platforms": ["FACEBOOK", "INSTAGRAM", "YOUTUBE", "GENERAL"],
+        "features": ["100M+ 住宅IP", "99.9%正常运行时间", "99.9%成功率", "企业级支持"],
+        "website": "https://oxylabs.io/"
+    },
+    {
+        "name": "Dynamic Proxy Network", "rating": 4.3, "price": "$90/月起", "priceValue": 90, "proxyType": "rotating",
+        "platforms": ["YOUTUBE", "LINKEDIN", "FACEBOOK", "GENERAL"],
+        "features": ["动态IP分配", "智能轮换", "高可用性", "实时监控"],
+        "website": "https://dynamicproxynetwork.com/"
+    },
+    {
+        "name": "Soax", "rating": 4.3, "price": "$99/月起", "priceValue": 99, "proxyType": "residential",
+        "platforms": ["TIKTOK", "INSTAGRAM", "X", "TWITTER", "GENERAL"],
+        "features": ["8.5M+ 住宅IP", "移动代理", "高成功率", "实时监控"],
+        "website": "https://soax.com/"
+    },
+    {
+        "name": "Bright Data", "rating": 4.8, "price": "$10.50/GB起", "priceValue": 10.5, "proxyType": "residential",
+        "platforms": ["TIKTOK", "X", "TWITTER", "FACEBOOK", "INSTAGRAM", "YOUTUBE", "GENERAL"],
+        "features": ["72M+ 住宅IP", "99.9%正常运行时间", "99.8%成功率", "Web Unlocker工具"],
+        "website": "https://brightdata.com/"
+    },
+    {
+        "name": "Rotating Proxies", "rating": 4.2, "price": "$120/月起", "priceValue": 120, "proxyType": "rotating",
+        "platforms": ["TIKTOK", "X", "TWITTER", "FACEBOOK", "GENERAL"],
+        "features": ["自动轮换", "住宅IP池", "高匿名性", "API支持"],
+        "website": "https://rotatingproxies.com/"
+    },
+    {
+        "name": "Shifter", "rating": 4.4, "price": "$125/月起", "priceValue": 124.99, "proxyType": "residential",
+        "platforms": ["FACEBOOK", "INSTAGRAM", "YOUTUBE", "LINKEDIN", "GENERAL"],
+        "features": ["31M+ 住宅IP", "自动轮换", "高匿名性", "企业级"],
+        "website": "https://shifter.io/"
+    },
+    {
+        "name": "4G Mobile Proxies", "rating": 4.6, "price": "$150/月起", "priceValue": 150, "proxyType": "mobile",
+        "platforms": ["TIKTOK", "INSTAGRAM", "FACEBOOK", "X", "TWITTER", "GENERAL"],
+        "features": ["纯4G网络", "真实移动设备", "高成功率", "全球覆盖"],
+        "website": "https://4gmobileproxies.com/"
+    },
+    {
+        "name": "NetNut", "rating": 4.4, "price": "$15/GB起", "priceValue": 15, "proxyType": "residential",
+        "platforms": ["YOUTUBE", "LINKEDIN", "GENERAL"],
+        "features": ["85M+ 住宅IP", "99%正常运行时间", "99%成功率", "灵活定价"],
+        "website": "https://netnut.io/"
+    },
+    {
+        "name": "Blazing SEO", "rating": 4.4, "price": "$300/月起", "priceValue": 300, "proxyType": "datacenter",
+        "platforms": ["YOUTUBE", "LINKEDIN", "FACEBOOK", "GENERAL"],
+        "features": ["专用代理", "SEO优化", "高速稳定", "美国服务器"],
+        "website": "https://blazingseollc.com/"
+    },
+    {
+        "name": "Blazing SEO", "rating": 4.4, "price": "$300/月起", "priceValue": 300, "proxyType": "datacenter",
+        "platforms": ["YOUTUBE", "LINKEDIN", "FACEBOOK", "GENERAL"],
+        "features": ["专用代理", "SEO优化", "高速稳定", "美国服务器"],
+        "website": "https://blazingseollc.com/"
+    },
+    {
+        "name": "Infatica", "rating": 4.3, "price": "$360/月起", "priceValue": 360, "proxyType": "residential",
+        "platforms": ["FACEBOOK", "INSTAGRAM", "LINKEDIN", "GENERAL"],
+        "features": ["10M+ 住宅IP", "道德采集", "企业级", "全球覆盖"],
+        "website": "https://infatica.io/"
+    },
+    {
+        "name": "Infatica", "rating": 4.5, "price": "$360/月起", "priceValue": 360, "proxyType": "residential",
+        "platforms": ["FACEBOOK", "INSTAGRAM", "LINKEDIN", "GENERAL"],
+        "features": ["15M+ 住宅IP", "道德采集", "高质量IP", "企业解决方案"],
+        "website": "https://infatica.io/"
+    },
+    {
+        "name": "GeoSurf", "rating": 4.6, "price": "$450/月起", "priceValue": 450, "proxyType": "residential",
+        "platforms": ["FACEBOOK", "INSTAGRAM", "YOUTUBE", "GENERAL"],
+        "features": ["2M+ 住宅IP", "地理定位精准", "广告验证", "品牌保护"],
+        "website": "https://www.geosurf.com/"
+    },
+    {
+        "name": "Bright Data", "rating": 4.8, "price": "$500/月起", "priceValue": 500, "proxyType": "datacenter",
+        "platforms": ["LINKEDIN", "FACEBOOK", "YOUTUBE", "GENERAL"],
+        "features": ["72M+ 住宅IP", "Fortune 500信赖", "最高成功率", "全球数据中心"],
+        "website": "https://brightdata.com/"
+    }
+];
                         price: "$15/月起",
                         priceValue: 15,
                         rating: 4.7,
@@ -1398,7 +1603,7 @@
                     <h3>🏆 最便宜住宅IP服务综合报告</h3>
                     <div class="report-content">
                         <div class="top-picks">
-                            <div class="pick-card winner">
+                            <a href="https://www.webshare.io/?referral_code=p1zhe" target="_blank" class="pick-card winner">
                                 <div class="pick-header">
                                     <span class="crown">👑</span>
                                     <h4>最佳性价比选择</h4>
@@ -1410,9 +1615,9 @@
                                     ✅ 定制化方案<br>
                                     ✅ 适合初创企业和个人开发者</p>
                                 </div>
-                            </div>
+                            </a>
                             
-                            <div class="pick-card">
+                            <a href="https://iproyal.com/?r=iproyal" target="_blank" class="pick-card">
                                 <div class="pick-header">
                                     <span class="medal">🥈</span>
                                     <h4>最佳月付选择</h4>
@@ -1424,9 +1629,9 @@
                                     ✅ 99%正常运行时间<br>
                                     ✅ 24/7客服支持</p>
                                 </div>
-                            </div>
+                            </a>
                             
-                            <div class="pick-card">
+                            <a href="https://proxyseller.com/?from=mianfeidaili" target="_blank" class="pick-card">
                                 <div class="pick-header">
                                     <span class="medal">🥉</span>
                                     <h4>最佳平衡选择</h4>
@@ -1438,7 +1643,7 @@
                                     ✅ 无限数据选项<br>
                                     ✅ 灵活套餐配置</p>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         
                         <div class="price-analysis">
@@ -1670,7 +1875,7 @@
         }
 
         // 过滤功能
-        function applyFilters() {
+        function filterProxies() {
             if (proxyData.length === 0) {
                 console.log('没有数据可过滤');
                 return;
@@ -1731,10 +1936,7 @@
 
         // 为过滤器添加事件监听
         document.addEventListener('DOMContentLoaded', function() {
-            const filters = ['proxyTypeFilter', 'priceFilter', 'locationFilter', 'bandwidthFilter', 'protocolFilter'];
-            filters.forEach(filterId => {
-                document.getElementById(filterId).addEventListener('change', applyFilters);
-            });
+            document.getElementById('search-button').addEventListener('click', filterProxies);
             
             // 为平台搜索输入框添加回车键监听
             document.getElementById('platformSearch').addEventListener('keypress', function(e) {
