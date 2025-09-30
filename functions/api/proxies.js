@@ -15,9 +15,9 @@ export async function onRequest(context) {
         const list = await kv.list();
         const proxies = [];
         for (const key of list.keys) {
-          const value = await kv.get(key.name);
+          const value = await kv.get(key.name, { type: 'json' });
           if (value) {
-            proxies.push(JSON.parse(value));
+            proxies.push(value);
           }
         }
         return new Response(JSON.stringify(proxies), {
@@ -27,6 +27,9 @@ export async function onRequest(context) {
 
       case 'POST': {
         const newProxy = await request.json();
+        if (!newProxy) {
+            return new Response('Invalid proxy data', { status: 400 });
+        }
         newProxy.id = crypto.randomUUID(); // 生成唯一 ID
         await kv.put(newProxy.id, JSON.stringify(newProxy));
         return new Response(JSON.stringify(newProxy), {
@@ -37,10 +40,10 @@ export async function onRequest(context) {
       
       case 'PUT': {
         const updatedProxy = await request.json();
-        const id = updatedProxy.id;
-        if (!id) {
+        if (!updatedProxy || !updatedProxy.id) {
           return new Response('Missing proxy ID', { status: 400 });
         }
+        const id = updatedProxy.id;
         await kv.put(id, JSON.stringify(updatedProxy));
         return new Response(JSON.stringify(updatedProxy), {
           headers: { 'Content-Type': 'application/json' },

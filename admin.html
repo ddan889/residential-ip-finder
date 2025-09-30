@@ -440,33 +440,50 @@
                 const stats = await response.json();
                 
                 const container = document.getElementById('stats-container');
+
+                if (stats.error) {
+                    container.innerHTML = `<div class="alert alert-error">加载统计数据失败: ${stats.error}</div>`;
+                    return;
+                }
+
+                if (stats.proxyCount === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: #6c757d; padding: 40px;">暂无代理服务商数据，无法生成统计信息。</p>';
+                    return;
+                }
+
+                const countryStatsHtml = Object.entries(stats.countryStats || {}).map(([country, count]) => `
+                    <div class="stat-card">
+                        <div class="stat-number">${count}</div>
+                        <div class="stat-label">${country}</div>
+                    </div>
+                `).join('');
+
                 container.innerHTML = `
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-number">${stats.total}</div>
-                            <div class="stat-label">总代理商数量</div>
+                            <div class="stat-number">${stats.proxyCount}</div>
+                            <div class="stat-label">代理总数</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-number">$${stats.price_range.min}</div>
-                            <div class="stat-label">最低价格</div>
+                            <div class="stat-number">${stats.totalTrafficGB}</div>
+                            <div class="stat-label">总流量 (GB)</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-number">$${stats.price_range.max}</div>
-                            <div class="stat-label">最高价格</div>
+                            <div class="stat-number">$${stats.avgPricePerGB}</div>
+                            <div class="stat-label">平均价格 ($/GB)</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-number">$${stats.price_range.avg}</div>
-                            <div class="stat-label">平均价格</div>
+                            <div class="stat-number">$${stats.minPrice}</div>
+                            <div class="stat-label">最低价格 ($/GB)</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">$${stats.maxPrice}</div>
+                            <div class="stat-label">最高价格 ($/GB)</div>
                         </div>
                     </div>
-                    <h3 style="margin-bottom: 20px; color: #2c3e50;">类别分布</h3>
+                    <h3 style="margin-bottom: 20px; color: #2c3e50;">国家/地区分布</h3>
                     <div class="stats-grid">
-                        ${Object.entries(stats.categories).map(([category, count]) => `
-                            <div class="stat-card">
-                                <div class="stat-number">${count}</div>
-                                <div class="stat-label">${getCategoryName(category)}</div>
-                            </div>
-                        `).join('')}
+                        ${countryStatsHtml.length > 0 ? countryStatsHtml : '<p style="text-align: center; color: #6c757d; padding: 20px;">无国家/地区数据</p>'}
                     </div>
                 `;
             } catch (error) {
