@@ -519,28 +519,28 @@
                 container.innerHTML = `
                     <div class="proxy-list">
                         ${proxies.map(proxy => `
-                            <div class="proxy-card">
+                            <div class="proxy-card" id="proxy-card-${proxy.id}">
                                 <div class="proxy-header">
-                                    <div class="proxy-name">${proxy.name}</div>
-                                    <div class="proxy-price">${proxy.price}</div>
+                                    <div class="proxy-name">${proxy.name || 'N/A'}</div>
+                                    <div class="proxy-price">${proxy.price || 'N/A'}</div>
                                 </div>
                                 <div class="proxy-info">
                                     <div>
-                                        <strong>评分:</strong> ${proxy.rating}/5<br>
-                                        <strong>类别:</strong> ${getCategoryName(proxy.category)}<br>
-                                        <strong>官网:</strong> <a href="${proxy.website}" target="_blank">${proxy.website}</a>
+                                        <strong>评分:</strong> ${proxy.rating ? `${proxy.rating}/5` : 'N/A'}<br>
+                                        <strong>类别:</strong> ${getCategoryName(proxy.category) || 'N/A'}<br>
+                                        <strong>官网:</strong> ${proxy.website ? `<a href="${proxy.website}" target="_blank">${proxy.website}</a>` : 'N/A'}
                                     </div>
                                     <div>
                                         <strong>功能特性:</strong><br>
-                                        ${proxy.features.map(f => `• ${f}`).join('<br>')}
+                                        ${proxy.features && proxy.features.length > 0 ? proxy.features.map(f => `• ${f}`).join('<br>') : 'N/A'}
                                     </div>
                                 </div>
                                 <div style="margin: 15px 0;">
-                                    <strong>描述:</strong> ${proxy.description}
+                                    <strong>描述:</strong> ${proxy.description || 'N/A'}
                                 </div>
                                 <div class="proxy-actions">
-                                    <button class="btn btn-warning" onclick="editProxy(${proxy.id})">编辑</button>
-                                    <button class="btn btn-danger" onclick="deleteProxy(${proxy.id})">删除</button>
+                                    <button class="btn btn-warning" onclick="editProxy('${proxy.id}')">编辑</button>
+                                    <button class="btn btn-danger" onclick="deleteProxy('${proxy.id}')">删除</button>
                                 </div>
                             </div>
                         `).join('')}
